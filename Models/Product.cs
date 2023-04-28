@@ -8,27 +8,27 @@ public partial class Product
 {
     public int Id { get; set; }
 
-    public string Article { get; set; } = null!;
+    public string? Article { get; set; } = null!;
 
-    public string Alias { get; set; } = null!;
+    public string? Alias { get; set; } = null!;
 
     public int Price { get; set; }
 
-    public string Description { get; set; } = null!;
+    public string? Description { get; set; } = null!;
 
     public int CountAvailable { get; set; }
 
-    public string PreviewImage { get; set; } = null!;
+    public string? PreviewImage { get; set; } = null!;
 
     public bool IsVIsible { get; set; }
 
     public virtual ICollection<Basket> Baskets { get; set; } = new List<Basket>();
 
-    public virtual Brand Brand { get; set; } = null!;
+    public virtual Brand? Brand { get; set; } = null!;
 
-    public virtual Category Category { get; set; } = null!;
+    public virtual Category? Category { get; set; } = null!;
 
-    public virtual Color Color { get; set; } = null!;
+    public virtual Color? Color { get; set; } = null!;
 
     public virtual ICollection<Discount> Discounts { get; set; } = new List<Discount>();
 
