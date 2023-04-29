@@ -1,4 +1,6 @@
 using Feipder.Tools;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,12 @@ builder.Services.AddDbContext<DataContext>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+var version = Assembly.GetExecutingAssembly().GetName().Version;
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString()});
+});
 
 var app = builder.Build();
 
