@@ -14,7 +14,7 @@ WORKDIR "/src/."
 RUN dotnet build "Feipder.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Feipder.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Feipder.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

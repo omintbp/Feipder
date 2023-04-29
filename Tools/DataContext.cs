@@ -10,19 +10,20 @@ namespace Feipder.Tools
 
         public DataContext(IConfiguration configuration)
         {
+            Database.EnsureCreated();
             Configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             // connect to postgres with connection string from app settings
-            options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            new DbInitializer(modelBuilder).Seed();
+           // new DbInitializer(modelBuilder).Seed();
         }
 
         public DbSet<Product> Products { get; set; }
