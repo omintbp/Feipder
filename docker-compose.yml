@@ -11,6 +11,7 @@ services:
     ports:
       - "80:80"
     environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
       - ConnectionString=host=postgres_db;port=5432;database=feipback;username=postgres;password=123;Pooling=true;
     networks:
       - dev

@@ -15,8 +15,8 @@ namespace Feipder.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            //   options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
-            options.UseNpgsql(Configuration.GetConnectionString("Postgresql"));
+               options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
+            // options.UseNpgsql(Configuration.GetConnectionString("Postgresql"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
