@@ -1,16 +1,17 @@
 ﻿using Feipder.Models.ResponseModels;
 using Feipder.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Feipder.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly DataContext _dbContext;
 
-        public ProductController(DataContext dbContext)
+        public ProductsController(DataContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -27,9 +28,9 @@ namespace Feipder.Controllers
                 return NotFound();
             }
 
-            var products = _dbContext.Products.Select((p) => new ProductResponse(p));
+            var products = _dbContext.Products.Include(x => x.Category).Select((p) => new ProductResponse(p));
 
-            return new JsonResult(products);
+            return Ok(products);
         }
     }
 }

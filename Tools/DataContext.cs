@@ -10,22 +10,24 @@ namespace Feipder.Tools
 
         public DataContext(IConfiguration configuration)
         {
-            Database.EnsureCreated();
             Configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // connect to postgres with connection string from app settings
-            options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
+            //   options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
+            options.UseNpgsql(Configuration.GetConnectionString("Postgresql"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-           // new DbInitializer(modelBuilder).Seed();
+            modelBuilder.Entity<Category>()
+                .HasOne(s => s.Parent)
+                .WithMany(m => m.Children)
+                .HasForeignKey(e => e.ParentId);
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

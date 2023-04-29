@@ -11,15 +11,17 @@ public partial class Category
 
     public string Alias { get; set; } = null!;
 
-    public bool IsVisible { get; set; }
+    public int? ParentId { get; set; }
+    
+    public virtual Category? Parent { get; set; }
+
+    public virtual ICollection<Category> Children { get; set; } = new List<Category>();
 
     public string Image { get; set; } = null!;
 
-    public virtual ICollection<Category> InverseParent { get; set; } = new List<Category>();
+    public bool IsVisible { get; set; }
 
-    public virtual Category Parent { get; set; } = null!;
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
-
-    public virtual ICollection<Size> Sizes { get; set; } = new List<Size>();
+    public ICollection<Size> Sizes { get; set; } = new List<Size>();
 }
