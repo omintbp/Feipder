@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Feipder.Data.Config;
+using Microsoft.EntityFrameworkCore;
+using DrColor = System.Drawing.Color;
 
 namespace Feipder.Models;
 
+[EntityTypeConfiguration(typeof(ColorConfiguration))]
 public partial class Color
 {
     public int Id { get; set; }
@@ -11,5 +13,14 @@ public partial class Color
 
     public string Value { get; set; } = null!;
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public Color()
+    {
+
+    }
+
+    public Color(DrColor color)
+    {
+        Name = color.Name;
+        Value = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+    }
 }

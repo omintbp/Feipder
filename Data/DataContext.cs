@@ -2,7 +2,7 @@
 using Feipder.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Feipder.Tools
+namespace Feipder.Data
 {
     public class DataContext : DbContext
     {
@@ -15,7 +15,7 @@ namespace Feipder.Tools
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-               options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("ConnectionString"));
             // options.UseNpgsql(Configuration.GetConnectionString("Postgresql"));
         }
 
@@ -29,5 +29,6 @@ namespace Feipder.Tools
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Color> Colors { get; set; }
     }
 }

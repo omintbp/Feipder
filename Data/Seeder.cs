@@ -3,7 +3,7 @@ using Feipder.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Feipder.Tools
+namespace Feipder.Data
 {
     public static class Seeder
     {
