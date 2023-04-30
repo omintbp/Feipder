@@ -2,6 +2,7 @@
 using Feipder.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Xml.Serialization;
 
 namespace Feipder.Data
 {
@@ -118,12 +119,12 @@ namespace Feipder.Data
             if (!dataContext.Products.Any())
             {
                 var lastCategories = dataContext.Categories.Include(x => x.Children).Where(x => !x.Children.Any()).ToList();
+                var brands = dataContext.Brands.ToList();
 
                 var random = new Random();
                 var fixture = new Fixture();
 
                 fixture.Customize<Product>(product => product.Without(x => x.Id)
-                                                            .Without(x => x.Brand)
                                                             .Without(x => x.Baskets)
                                                             .Without(x => x.Color)
                                                             .Without(x => x.Discounts).Without(x => x.FavoriteProducts)
@@ -131,11 +132,15 @@ namespace Feipder.Data
                                                             .Without(x => x.ProductImages)
                                                             .Without(x => x.OrdersProducts)
                                                             .Without(x => x.ProductSizeAvailables)
-                                                            .With(x => x.Category,
-                                                                lastCategories[random.Next(0, lastCategories.Count)]
-                                                            ));
+                                                            .Without(x => x.Brand)
+                                                            .Without(x => x.Category));
 
                 var products = fixture.CreateMany<Product>(10).ToList();
+                products.ForEach(p =>
+                {
+                    p.Brand = brands[random.Next(0, brands.Count)];
+                    p.Category = lastCategories[random.Next(0, lastCategories.Count)];
+                });
                 dataContext.AddRange(products);
                 dataContext.SaveChanges();
             }

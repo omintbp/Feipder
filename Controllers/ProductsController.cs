@@ -28,7 +28,10 @@ namespace Feipder.Controllers
                 return NotFound();
             }
 
-            var products = _dbContext.Products.Include(x => x.Category).Select((p) => new ProductResponse(p));
+            var products = _dbContext.Products
+                .Include(x => x.Category)
+                .Include(x => x.Brand)
+                .Select((p) => new ProductResponse(p));
 
             return Ok(products);
         }

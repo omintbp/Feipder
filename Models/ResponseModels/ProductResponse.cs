@@ -20,6 +20,7 @@
             CountAvailable = product.CountAvailable; 
             PreviewImage = product.PreviewImage;
             IsVIsible = product.IsVIsible;
+            Brand = product.Brand;
             
             Category = new ProductCategory()
             {
@@ -40,5 +41,6 @@
         public string? PreviewImage { get; set; } = null!;
         public bool IsVIsible { get; set; }
         public ProductCategory Category { get; set; }
+        public Brand Brand { get; set; }
     }
 }

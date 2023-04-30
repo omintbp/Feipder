@@ -22,11 +22,11 @@ public partial class Product
 
     public bool IsVIsible { get; set; }
 
-    public virtual ICollection<Basket> Baskets { get; set; } = new List<Basket>();
-
     public virtual Brand? Brand { get; set; } = null!;
 
     public virtual Category Category { get; set; } = null!;
+
+    public virtual ICollection<Basket> Baskets { get; set; } = new List<Basket>();
 
     public virtual Color? Color { get; set; } = null!;
 
