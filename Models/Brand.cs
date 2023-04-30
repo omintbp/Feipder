@@ -1,5 +1,6 @@
 ﻿using Feipder.Data.Config;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Feipder.Models;
@@ -9,7 +10,9 @@ public partial class Brand
 {
     public int Id { get; set; }
 
+    [Required]
     public string Name { get; set; } = null!;
+    
     public string Logo { get; set; } = null!;
 
     [JsonIgnore]

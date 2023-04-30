@@ -22,7 +22,7 @@ namespace Feipder.Controllers
 
         // GET: api/<CategoriesController>
         [HttpGet]
-        public ActionResult<IEnumerable<Category>> Get()
+        public ActionResult<IList<CategoryResponse>> Get()
         {
             if (!_db.Categories.Any())
             {

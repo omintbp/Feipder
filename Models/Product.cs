@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Feipder.Models;
 
 namespace Feipder;
@@ -8,10 +9,13 @@ public partial class Product
 {
     public int Id { get; set; }
 
-    public string? Article { get; set; } = null!;
+    [Required]
+    public string Article { get; set; }
+    
+    [Required]
+    public string Alias { get; set; }
 
-    public string? Alias { get; set; } = null!;
-
+    [Required]
     public int Price { get; set; }
 
     public string? Description { get; set; } = null!;

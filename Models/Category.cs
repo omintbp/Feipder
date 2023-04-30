@@ -7,9 +7,9 @@ public partial class Category
 {
     public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
 
-    public string Alias { get; set; } = null!;
+    public string Alias { get; set; }
 
     public int? ParentId { get; set; }
     
@@ -17,7 +17,7 @@ public partial class Category
 
     public virtual ICollection<Category> Children { get; set; } = new List<Category>();
 
-    public string Image { get; set; } = null!;
+    public string Image { get; set; }
 
     public bool IsVisible { get; set; }
 

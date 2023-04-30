@@ -30,35 +30,15 @@ namespace Feipder.Controllers
                 return NotFound();
             }
 
-            var products = _dbContext.Products
+            var products = await _dbContext.Products
                 .Include(x => x.Category)
                 .Include(x => x.Brand)
-                .Select((product) => new
-                {
-                    Id = product.Id,
-                    Article = product.Article,
-                    Alias = product.Alias,
-                    Description = product.Description,
-                    Price = product.Price,
-                    CountAvailable = product.CountAvailable,
-                    PreviewImage = product.PreviewImage,
-                    IsVIsible = product.IsVIsible,
-                    Brand = product.Brand,
-                    Category = new
-                        {
-                            Id = product.Category.Id,
-                            Name = product.Category.Name,
-                            Alias = product.Category.Alias,
-                            Image = product.Category.Image,
-                            IsVisible = product.Category.IsVisible
-                        }
-                });
+                .Select((product) => new ProductResponse(product)).ToListAsync();
 
             return Ok(products);
         }
 
-        [HttpGet("category/{id}")]
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProductsByCategory(int id)
+        private async Task<ActionResult> GetProductsByCategory(int id)
         {
             if (!_dbContext.Products.Any() || !_dbContext.Categories.Any())
             {

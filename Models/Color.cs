@@ -1,5 +1,6 @@
 ﻿using Feipder.Data.Config;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using DrColor = System.Drawing.Color;
 
 namespace Feipder.Models;
@@ -9,8 +10,10 @@ public partial class Color
 {
     public int Id { get; set; }
 
+    [Required]
     public string Name { get; set; } = null!;
-
+    
+    [Required]
     public string Value { get; set; } = null!;
 
     public Color()
