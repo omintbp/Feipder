@@ -21,7 +21,7 @@ namespace Feipder.Controllers
         /// </summary>
         /// <returns>all products</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts([FromQuery] string price = "0,0", [FromQuery]string Brands = "0")
         {
             if(_dbContext.Products == null)
             {
