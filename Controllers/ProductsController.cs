@@ -1,4 +1,5 @@
 ﻿using Feipder.Data;
+using Feipder.Models;
 using Feipder.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,26 @@ namespace Feipder.Controllers
             var products = _dbContext.Products
                 .Include(x => x.Category)
                 .Include(x => x.Brand)
-                .Select((p) => new ProductResponse(p));
+                .Select((product) => new
+                {
+                    Id = product.Id,
+                    Article = product.Article,
+                    Alias = product.Alias,
+                    Description = product.Description,
+                    Price = product.Price,
+                    CountAvailable = product.CountAvailable,
+                    PreviewImage = product.PreviewImage,
+                    IsVIsible = product.IsVIsible,
+                    Brand = product.Brand,
+                    Category = new
+                        {
+                            Id = product.Category.Id,
+                            Name = product.Category.Name,
+                            Alias = product.Category.Alias,
+                            Image = product.Category.Image,
+                            IsVisible = product.Category.IsVisible
+                        }
+                });
 
             return Ok(products);
         }
