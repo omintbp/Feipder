@@ -1,6 +1,10 @@
-﻿using Feipder.Data.Repository;
-using Feipder.Entities.Models.ResponseModels;
+﻿using Feipder.Entities.Models.ResponseModels;
+using Feipder.Entities.Models;
+using Feipder.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Feipder.Entities;
+using Feipder.Data.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,7 +29,7 @@ namespace Feipder.Controllers
             {
                 return NotFound();
             }
-
+            
             //var result = _db.Categories.Include(x => x.Children).ToList().Where(x => x.Parent == null).ToList();
             //var treeView = new ResponseCategoryTree(result);
 
@@ -37,7 +41,7 @@ namespace Feipder.Controllers
         {
             var category = _repository.Categories.FindByCondition((category) => category.Id == categoryId).FirstOrDefault();
 
-            if (category == null)
+            if(category == null)
             {
                 return NotFound();
             }

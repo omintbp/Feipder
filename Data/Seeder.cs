@@ -3,6 +3,9 @@ using Feipder.Data.Repository;
 using Feipder.Entities;
 using Feipder.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
+using System.Xml.Serialization;
 
 namespace Feipder.Data
 {
@@ -121,7 +124,7 @@ namespace Feipder.Data
                 var shoesSizes = new List<Size>();
 
                 /// размеры обуви
-                for (var i = 31; i <= 46; i++)
+                for(var i = 31; i<=46; i++)
                 {
                     shoesSizes.Add(new Size() { Id = i - 30, Value = $"{i}" });
                 }
@@ -151,7 +154,7 @@ namespace Feipder.Data
 
                 var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Одежда"));
                 shoesSizes.ForEach(size => clothCategory?.Sizes.Add(size));
-
+                
                 var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Аксессуары"));
                 shoesSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
 
@@ -196,7 +199,7 @@ namespace Feipder.Data
 
                 var products = dataContext.Products.Include(x => x.Category).ThenInclude(x => x.Sizes).Include(x => x.Category!.Parent).ToList();
 
-                for (var i = 0; i < storageRowCount; i++)
+                for(var i = 0; i < storageRowCount; i++)
                 {
                     var productIndex = random.Next(0, products.Count);
                     var randomProduct = products[productIndex];
@@ -206,7 +209,7 @@ namespace Feipder.Data
                     var sizes = repository.Sizes.FindByCategory(randomProduct.Category).ToList();
 
                     var sizesCount = random.Next(1, 4);
-                    for (var j = 0; j < sizesCount; j++)
+                    for(var j = 0; j < sizesCount; j++)
                     {
                         var randomSize = sizes[random.Next(0, sizes.Count)];
                         sizes.Remove(randomSize);

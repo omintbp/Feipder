@@ -13,7 +13,7 @@ public partial class Color
     [Required]
     [StringLength(100)]
     public string Name { get; set; } = null!;
-
+    
     [Required]
     public string Value { get; set; } = null!;
 

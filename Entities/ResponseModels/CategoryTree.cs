@@ -1,4 +1,7 @@
-﻿namespace Feipder.Entities.Models.ResponseModels
+﻿using System.Reflection.Emit;
+using System.Text.Json.Nodes;
+
+namespace Feipder.Entities.Models.ResponseModels
 {
     public class ResponseCategoryTree
     {
@@ -6,9 +9,9 @@
 
         public IList<CategoryResponse> Nodes { get { return _nodes; } }
 
-        public ResponseCategoryTree(IList<Category> categories)
+        public ResponseCategoryTree(IList<Category> categories) 
         {
-            foreach (var category in categories)
+            foreach(var category in categories)
             {
                 var node = new CategoryResponse(category)
                 {
@@ -25,7 +28,7 @@
 
             if (category.Children.Any())
             {
-                foreach (var child in category.Children)
+                foreach(var child in category.Children)
                 {
                     var childCategory = new CategoryResponse(child, level)
                     {

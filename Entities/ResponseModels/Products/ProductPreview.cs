@@ -4,8 +4,8 @@ namespace Feipder.Entities.ResponseModels.Products
 {
     public class ProductPreview
     {
-        public ProductPreview(Product product)
-        {
+        public ProductPreview(Product product) 
+        { 
             Id = product.Id;
             Article = product.Article;
             Name = product.Alias;
@@ -15,8 +15,6 @@ namespace Feipder.Entities.ResponseModels.Products
             NewProduct = product.IsNew;
             Discount = product.Discount;
             CreatedDate = product.CreatedDate;
-            CategoryName = product.Category.Name;
-            CategoryId = product.Category.Id;
             Color = product.Color;
         }
 
@@ -27,8 +25,6 @@ namespace Feipder.Entities.ResponseModels.Products
         public bool NewProduct { get; set; }
         public Brand Brand { get; set; }
         public List<string> PreviewImages { get; set; } = new List<string>();
-        public string CategoryName { get; set; }
-        public int CategoryId { get; set; }
         public Color Color { get; set; }
         public Discount Discount { get; set; }
         public IEnumerable<ProductSize> Sizes { get; set; }

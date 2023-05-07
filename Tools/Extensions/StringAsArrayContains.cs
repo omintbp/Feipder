@@ -9,8 +9,7 @@
                 var ids = str.Split(',').Select(x => Convert.ToInt32(x)).ToList();
                 return ids.Contains(id);
 
-            }
-            catch (Exception e)
+            }catch(Exception e)
             {
                 throw;
             }
@@ -18,7 +17,7 @@
 
         public static IEnumerable<int> ToIntArray(this string str)
         {
-            if (str == null)
+            if(str == null)
             {
                 return new List<int>();
             }

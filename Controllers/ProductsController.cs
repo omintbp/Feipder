@@ -1,12 +1,12 @@
-﻿using Feipder.Data;
-using Feipder.Data.Repository;
-using Feipder.Entities.Models;
-using Feipder.Entities.RequestModels;
-using Feipder.Entities.ResponseModels;
-using Feipder.Entities.ResponseModels.Products;
-using Feipder.Tools.Extensions;
+﻿using Feipder.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Feipder.Data.Repository;
+using Feipder.Entities.RequestModels;
+using Feipder.Data;
+using Feipder.Tools.Extensions;
+using Feipder.Entities.ResponseModels.Products;
+using Feipder.Entities.ResponseModels;
 
 namespace Feipder.Controllers
 {
@@ -22,7 +22,7 @@ namespace Feipder.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetProducts([FromQuery] ProductsParameters queryParams, [FromQuery] SortMethod sortMethod,
+        public ActionResult<ProductPreviews> GetProducts([FromQuery]ProductsParameters queryParams, [FromQuery]SortMethod sortMethod, 
             [FromQuery] int limit = 20, [FromQuery] int offset = 0, [FromQuery] bool withProperties = false)
         {
 
@@ -37,10 +37,12 @@ namespace Feipder.Controllers
             var results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository), offset, limit, sortMethod).Select(p =>
             {
                 /// получаем размеры продукта (false = получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
-                var sizes = _repository.Sizes.FindByProduct(p, false).Where(s => queryParams.Sizes.ToIntArray().Contains(s.Id));
+                var paramSizes = queryParams.Sizes.ToIntArray();
 
-                return new ProductPreview(p)
-                {
+                var sizes = _repository.Sizes.FindByProduct(p, false)
+                    .Where(s => paramSizes.Count() == 0 || queryParams.Sizes.ToIntArray().Contains(s.Id));
+
+                return new ProductPreview(p) { 
                     Sizes = sizes
                 };
 
@@ -99,7 +101,7 @@ namespace Feipder.Controllers
                     Id = 3,
                     PropertyName = nameof(Size),
                     Data = (from size in sizes
-                            group size by new { size.Id, size.Value, size.Description } into c
+                            group size by new { size.Id, size.Value, size.Description} into c
                             select new ProductPropertyValue()
                             {
                                 Id = c.Key.Id,
@@ -109,13 +111,14 @@ namespace Feipder.Controllers
                             }).ToList()
                 });
             }
-            return new JsonResult(new
+
+            return Ok(new ProductPreviews
             {
                 MaxPrice = maxPrice,
                 MinPrice = minPrice,
-                ProductsCunt = count,
+                ProductsCount = count,
                 Products = results,
-                ProducsProperty = productsProperty
+                ProductProperties = productsProperty
             });
         }
     }

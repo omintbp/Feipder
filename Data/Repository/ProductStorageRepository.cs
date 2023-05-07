@@ -10,7 +10,7 @@ namespace Feipder.Data.Repository
         {
         }
 
-        public override IQueryable<ProductStorage> FindAll()
-             => RepositoryContext.Set<ProductStorage>().Include(x => x.Product).Include(x => x.Product).AsNoTracking();
+       public override IQueryable<ProductStorage> FindAll() 
+            => RepositoryContext.Set<ProductStorage>().Include(x => x.Product).Include(x => x.Product).AsNoTracking();
     }
 }

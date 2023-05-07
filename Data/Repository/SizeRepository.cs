@@ -22,7 +22,7 @@ namespace Feipder.Data.Repository
 
             var currentCategory = category;
 
-            while (currentCategory!.ParentId != null && currentCategory.Sizes.Count == 0)
+            while(currentCategory!.ParentId != null && currentCategory.Sizes.Count == 0)
             {
                 currentCategory = RepositoryContext.Categories.Where(p => p.Id == currentCategory.ParentId).Include(x => x.Sizes).FirstOrDefault();
             }
@@ -36,7 +36,7 @@ namespace Feipder.Data.Repository
         {
             var result = new List<ProductSize>();
 
-            if (product == null || product.Category == null)
+            if(product == null || product.Category == null)
             {
                 return result;
             }
@@ -57,23 +57,23 @@ namespace Feipder.Data.Repository
             if (considerEmptySizes)
             {
                 var test = FindByCategory(product.Category);
-
+                
                 result = (from categorySize in FindByCategory(product.Category)
-                          join productSize in sizesByProducts on categorySize.Id equals productSize.Id into v_sizes
+                            join productSize in sizesByProducts on categorySize.Id equals productSize.Id into v_sizes
                           from size in v_sizes.DefaultIfEmpty()
                           select new ProductSize()
-                          {
-                              Id = categorySize.Id,
-                              Value = categorySize.Value,
-                              Description = categorySize.Description,
-                              Count = size == null ? 0 : size.Count
-                          }).ToList();
+                            {
+                                 Id = categorySize.Id,
+                                 Value = categorySize.Value,
+                                 Description = categorySize.Description,
+                                 Count = size == null ? 0 : size.Count
+                            }).ToList();
             }
             else
             {
                 result = sizesByProducts;
             }
-
+            
             return result;
         }
     }

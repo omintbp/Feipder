@@ -1,4 +1,5 @@
 ﻿using Feipder.Entities.Models;
+using Feipder.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Feipder.Entities

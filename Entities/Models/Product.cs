@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Components;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Feipder.Entities.Models;
@@ -10,9 +12,9 @@ public partial class Product
     [Required]
     [StringLength(40)]
     public string Article { get; set; } = null!;
-
+    
     [Required(ErrorMessage = "The product title should not be empty")]
-    [StringLength(70, ErrorMessage = "The size of the title should not exceed 70 characters")]
+    [StringLength(70, ErrorMessage = "The size of the title should not exceed 70 characters")] 
     public string Title { get; set; } = null!;
 
     [StringLength(70, ErrorMessage = "The size of the alias should not exceed 70 characters")]
@@ -43,7 +45,7 @@ public partial class Product
     [JsonIgnore]
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-    public bool ContainsIn(string filter) =>
+    public bool ContainsIn(string filter) => 
         Category.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)
                         || (Alias != null && Alias.Contains(filter, StringComparison.OrdinalIgnoreCase))
                         || Article.Contains(filter, StringComparison.OrdinalIgnoreCase);
