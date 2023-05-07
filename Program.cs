@@ -1,6 +1,9 @@
 using Feipder.Data;
+using Feipder.Data.Repository;
+using Feipder.Entities;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>();
-
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var version = Assembly.GetExecutingAssembly().GetName().Version;
 builder.Services.AddSwaggerGen(c =>

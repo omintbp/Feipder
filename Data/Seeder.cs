@@ -1,6 +1,9 @@
 ﻿using AutoFixture;
-using Feipder.Models;
+using Feipder.Data.Repository;
+using Feipder.Entities;
+using Feipder.Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Xml.Serialization;
 
@@ -68,8 +71,8 @@ namespace Feipder.Data
                     new Category()
                     {
                         Id= 7,
-                        Name = "Брюки",
-                        Alias = "Брюки",
+                        Name = "Футболки",
+                        Alias = "Футболки",
                         ParentId = 1,
                         Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
@@ -116,32 +119,114 @@ namespace Feipder.Data
                 dataContext.SaveChanges();
             }
 
+            if (!dataContext.Sizes.Any())
+            {
+                var shoesSizes = new List<Size>();
+
+                /// размеры обуви
+                for(var i = 31; i<=46; i++)
+                {
+                    shoesSizes.Add(new Size() { Id = i - 30, Value = $"{i}" });
+                }
+
+                var shirtSizes = new List<Size>() {
+                    new Size() { Id = 17, Value = "S" },
+                    new Size() { Id = 18, Value = "M" },
+                    new Size() { Id = 19, Value = "L" },
+                    new Size() { Id = 20, Value = "S" },
+                    new Size() { Id = 21, Value = "XL" },
+                    new Size() { Id = 22, Value = "XXL" }
+                };
+
+
+                dataContext.Sizes.AddRange(shoesSizes);
+                dataContext.Sizes.AddRange(shirtSizes);
+
+                dataContext.SaveChanges();
+
+                var shoesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Обувь"));
+
+                shoesSizes.ForEach(size => shoesCategory?.Sizes.Add(size));
+
+                var shirtCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Футболки"));
+
+                shirtSizes.ForEach(size => shirtCategory?.Sizes.Add(size));
+
+                var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Одежда"));
+                shoesSizes.ForEach(size => clothCategory?.Sizes.Add(size));
+                
+                var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Аксессуары"));
+                shoesSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
+
+                dataContext.SaveChanges();
+            }
+
             if (!dataContext.Products.Any())
             {
                 var lastCategories = dataContext.Categories.Include(x => x.Children).Where(x => !x.Children.Any()).ToList();
                 var brands = dataContext.Brands.ToList();
+                var colors = dataContext.Colors.ToList();
 
                 var random = new Random();
                 var fixture = new Fixture();
 
                 fixture.Customize<Product>(product => product.Without(x => x.Id)
-                                                            .Without(x => x.Baskets)
                                                             .Without(x => x.Color)
-                                                            .Without(x => x.Discounts).Without(x => x.FavoriteProducts)
-                                                            .Without(x => x.SubscribeProducts)
+                                                            .Without(x => x.Discount)
+                                                            .Without(x => x.Price)
                                                             .Without(x => x.ProductImages)
-                                                            .Without(x => x.OrdersProducts)
-                                                            .Without(x => x.ProductSizeAvailables)
                                                             .Without(x => x.Brand)
+                                                            .Without(x => x.CreatedDate)
                                                             .Without(x => x.Category));
 
-                var products = fixture.CreateMany<Product>(10).ToList();
+                var products = fixture.CreateMany<Product>(100).ToList();
                 products.ForEach(p =>
                 {
+                    p.Color = colors[random.Next(0, colors.Count)];
                     p.Brand = brands[random.Next(0, brands.Count)];
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
+                    p.Price = random.NextDouble() * 1000 + 100;
                 });
                 dataContext.AddRange(products);
+                dataContext.SaveChanges();
+            }
+
+            if (!dataContext.Storage.Any())
+            {
+                var random = new Random();
+                var storageRowCount = 50;
+                var repository = new RepositoryWrapper(dataContext);
+
+                var products = dataContext.Products.Include(x => x.Category).ThenInclude(x => x.Sizes).Include(x => x.Category!.Parent).ToList();
+
+                for(var i = 0; i < storageRowCount; i++)
+                {
+                    var productIndex = random.Next(0, products.Count);
+                    var randomProduct = products[productIndex];
+
+                    products.Remove(randomProduct);
+
+                    var sizes = repository.Sizes.FindByCategory(randomProduct.Category).ToList();
+
+                    var sizesCount = random.Next(1, 4);
+                    for(var j = 0; j < sizesCount; j++)
+                    {
+                        var randomSize = sizes[random.Next(0, sizes.Count)];
+                        sizes.Remove(randomSize);
+
+                        var productStorage = new ProductStorage()
+                        {
+                            Count = random.Next(1, 10),
+                            Product = randomProduct,
+                            Size = randomSize
+                        };
+
+                        dataContext.Storage.Add(productStorage);
+                        //repository.Storage.Create(productStorage);
+                    }
+
+                }
+
                 dataContext.SaveChanges();
             }
         }
