@@ -50,7 +50,7 @@ namespace Feipder.Data.Repository
                     Id = x.Size.Id,
                     Value = x.Size.Value,
                     Description = x.Size.Description,
-                    Count = x.Count
+                    Available = x.TotalCount
                 })
                 .ToList();
 
@@ -66,7 +66,7 @@ namespace Feipder.Data.Repository
                                  Id = categorySize.Id,
                                  Value = categorySize.Value,
                                  Description = categorySize.Description,
-                                 Count = size == null ? 0 : size.Count
+                                 Available = size == null ? 0 : size.Available
                             }).ToList();
             }
             else

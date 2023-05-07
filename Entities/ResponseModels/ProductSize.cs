@@ -5,6 +5,8 @@
         public int Id { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }
-        public int Count { get; set; }
+        public int Available { get; set; }
+        public bool OnFitting { get; set; } = false;
+        public bool Subscribed { get; set; } = false;
     }
 }

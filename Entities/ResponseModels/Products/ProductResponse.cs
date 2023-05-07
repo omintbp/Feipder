@@ -1,47 +1,36 @@
 ﻿using Feipder.Entities.Models;
+using Feipder.Entities.ResponseModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.Models.ResponseModels.Products
 {
     public class ProductResponse
     {
-        public class ProductCategory
-        {
-            public int Id { get; set; }
-            public string? Name { get; set; }
-            public string? Alias { get; set; }
-            public string? Image { get; set; }
-            public bool IsVisible { get; set; }
-        }
-
-        public ProductResponse(Product product)
-        {
-            Id = product.Id;
-            Article = product.Article;
-            Alias = product.Alias;
-            Description = product.Description;
-            Price = product.Price;
-            PreviewImage = product.PreviewImage;
-            IsVisible = product.IsVisible;
-            Brand = product.Brand;
-
-            Category = new ProductCategory()
-            {
-                Id = product.Category.Id,
-                Name = product.Category.Name,
-                Alias = product.Category.Alias,
-                Image = product.Category.Image,
-                IsVisible = product.Category.IsVisible
-            };
-        }
-
+        [Required]
         public int Id { get; set; }
-        public string? Article { get; set; } = null!;
-        public string Alias { get; set; } = null!;
-        public string Description { get; set; } = null!;
+
+        [Required]
+        [StringLength(40)]
+        public string Name { get; set; } = null!;
+        
+        [Required]
+        [StringLength(40)]
+        public string Article { get; set; } = null!;
+
+        [Required]
+        [Range(0, Double.MaxValue)]
         public double Price { get; set; }
-        public string? PreviewImage { get; set; } = null!;
-        public bool IsVisible { get; set; }
-        public ProductCategory Category { get; set; }
-        public Brand Brand { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; } = null!;
+
+        public bool IsNew { get; set; } = false;
+
+        public Color? Color { get; set; }
+        public Brand? Brand { get; set; }
+        public Category? Category { get; set; }
+        public Discount? Discount { get; set; }
+        public ICollection<ProductSize> Sizes { get; set; } = new List<ProductSize>();
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
     }
 }

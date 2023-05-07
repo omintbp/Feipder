@@ -216,7 +216,7 @@ namespace Feipder.Data
 
                         var productStorage = new ProductStorage()
                         {
-                            Count = random.Next(1, 10),
+                            TotalCount = random.Next(1, 10),
                             Product = randomProduct,
                             Size = randomSize
                         };

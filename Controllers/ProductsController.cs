@@ -7,6 +7,7 @@ using Feipder.Data;
 using Feipder.Tools.Extensions;
 using Feipder.Entities.ResponseModels.Products;
 using Feipder.Entities.ResponseModels;
+using Feipder.Entities.Models.ResponseModels.Products;
 
 namespace Feipder.Controllers
 {
@@ -36,9 +37,9 @@ namespace Feipder.Controllers
             /// Получаем продукты по переданным фильтрам
             var results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository), offset, limit, sortMethod).Select(p =>
             {
-                /// получаем размеры продукта (false = получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
                 var paramSizes = queryParams.Sizes.ToIntArray();
 
+                /// получаем размеры продукта (false = получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
                 var sizes = _repository.Sizes.FindByProduct(p, false)
                     .Where(s => paramSizes.Count() == 0 || queryParams.Sizes.ToIntArray().Contains(s.Id));
 
@@ -57,7 +58,8 @@ namespace Feipder.Controllers
             /// количество элементов в выборке
             var count = results.Count();
 
-
+            /// используемые в выборки свойства товаров.
+            /// каждое свойство содержит значение и количество товаров, которые данному значению соответствуют.
             var productsProperty = new List<ProductProperty>();
 
             if (withProperties)
@@ -65,7 +67,7 @@ namespace Feipder.Controllers
                 productsProperty.Add(new ProductProperty()
                 {
                     Id = 1,
-                    PropertyName = nameof(Product.Color),
+                    PropertyName = nameof(Color),
                     Data = (from result in results
                             group result by new { result.Color!.Id, result.Color.Value, result.Color.Name } into c
                             select new ProductPropertyValue()
@@ -80,7 +82,7 @@ namespace Feipder.Controllers
                 productsProperty.Add(new ProductProperty()
                 {
                     Id = 2,
-                    PropertyName = nameof(Product.Brand),
+                    PropertyName = nameof(Brand),
                     Data = (from result in results
                             group result by new { result.Brand!.Id, result.Brand.Name } into c
                             select new ProductPropertyValue()
@@ -92,8 +94,8 @@ namespace Feipder.Controllers
                             }).ToList()
                 });
 
+                /// собираем размеры из выборки для группировки
                 var sizes = new List<ProductSize>();
-
                 results.ForEach(result => sizes.AddRange(result.Sizes));
 
                 productsProperty.Add(new ProductProperty()
@@ -120,6 +122,46 @@ namespace Feipder.Controllers
                 Products = results,
                 ProductProperties = productsProperty
             });
+        }
+
+        [HttpGet("{productId}")]
+        public ActionResult<ProductResponse> GetProduct(int productId)
+        {
+            var product = _repository.Products.FindByCondition(p => p.Id == productId).FirstOrDefault();
+
+            if(product == null)
+            {
+                return NotFound();
+            }
+
+            var sizes = new List<ProductSize>();
+
+            try
+            {
+                sizes = _repository.Sizes.FindByProduct(product).ToList();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
+            var productResponse = new ProductResponse()
+            {
+                Id = product.Id,
+                Article = product.Article,
+                Brand = product.Brand,
+                Category = product.Category,
+                Color = product.Color,
+                Description = product.Description,
+                Discount = product.Discount,
+                Images = product.ProductImages,
+                IsNew = product.IsNew,
+                Name = product.Alias,
+                Price = product.Price,
+                Sizes = sizes
+            };
+
+            return Ok(productResponse);
         }
     }
 }

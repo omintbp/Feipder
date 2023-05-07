@@ -12,16 +12,21 @@ public partial class Category
     public string Name { get; set; } = null!;
 
     [StringLength(70, ErrorMessage = "The size of the alias should not exceed 70 characters")]
-    public string? Alias { get; set; }
+    public string? Alias { get; set; } = null!;
 
     public int? ParentId { get; set; }
-    
+
+
+    [JsonIgnore]
     public virtual Category? Parent { get; set; }
 
-    public string? Image { get; set; }
+    public string? Image { get; set; } = null!;
 
+    [JsonIgnore]
     public bool IsVisible { get; set; } = false;
-    
+
+
+    [JsonIgnore]
     public virtual ICollection<Category> Children { get; set; } = new List<Category>();
 
     [JsonIgnore]
