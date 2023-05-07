@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Feipder.Data.Repository
+﻿namespace Feipder.Data.Repository
 {
     public interface IRepositoryBase<T>
     {

@@ -10,7 +10,7 @@ public partial class Size
     [Required(ErrorMessage = "size value must be set")]
     public string Value { get; set; } = null!;
 
-    public string? Description { get; set;} = null!;
+    public string? Description { get; set; } = null!;
 
     [JsonIgnore]
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();

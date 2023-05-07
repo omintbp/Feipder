@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Feipder.Data.Repository;
+﻿using Feipder.Data.Repository;
 using Feipder.Entities.Attributes;
 using Feipder.Entities.Models;
 using Feipder.Tools.Extensions;
@@ -34,7 +33,7 @@ namespace Feipder.Entities.RequestModels
         private bool IsColorsValid(Product product) => Colors == null || Colors.ContainsId(product.Color.Id);
         private bool IsSizesValid(Product product, IRepositoryWrapper repository)
         {
-            if(Sizes == null)
+            if (Sizes == null)
             {
                 return true;
             }

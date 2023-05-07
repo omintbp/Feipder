@@ -10,8 +10,10 @@ namespace Feipder.Data.Repository
         private ISizeRepository _sizes;
         private IProductStorageRepository _storage;
 
-        public IProductRepository Products {
-            get {
+        public IProductRepository Products
+        {
+            get
+            {
 
                 if (_products == null)
                 {
@@ -35,10 +37,11 @@ namespace Feipder.Data.Repository
             }
         }
 
-        public ISizeRepository Sizes {
+        public ISizeRepository Sizes
+        {
             get
             {
-                if(_sizes == null)
+                if (_sizes == null)
                 {
                     _sizes = new SizeRepository(_context);
                 }
@@ -51,7 +54,7 @@ namespace Feipder.Data.Repository
         {
             get
             {
-                if(_storage == null)
+                if (_storage == null)
                 {
                     _storage = new ProductStorageRepository(_context);
                 }

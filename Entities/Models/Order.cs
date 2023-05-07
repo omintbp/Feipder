@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Feipder.Entities.Models;
-
-namespace Feipder.Entities.Models;
+﻿namespace Feipder.Entities.Models;
 
 public partial class Order
 {

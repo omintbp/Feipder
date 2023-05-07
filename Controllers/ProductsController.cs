@@ -1,15 +1,12 @@
-﻿using Feipder.Entities.Models.ResponseModels.Products;
+﻿using Feipder.Data;
+using Feipder.Data.Repository;
 using Feipder.Entities.Models;
+using Feipder.Entities.RequestModels;
+using Feipder.Entities.ResponseModels;
+using Feipder.Entities.ResponseModels.Products;
+using Feipder.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.Versioning;
-using Feipder.Entities;
-using Feipder.Data.Repository;
-using Feipder.Entities.RequestModels;
-using Feipder.Data;
-using Feipder.Tools.Extensions;
-using Feipder.Entities.ResponseModels.Products;
-using Feipder.Entities.ResponseModels;
 
 namespace Feipder.Controllers
 {
@@ -25,7 +22,7 @@ namespace Feipder.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetProducts([FromQuery]ProductsParameters queryParams, [FromQuery]SortMethod sortMethod, 
+        public ActionResult GetProducts([FromQuery] ProductsParameters queryParams, [FromQuery] SortMethod sortMethod,
             [FromQuery] int limit = 20, [FromQuery] int offset = 0, [FromQuery] bool withProperties = false)
         {
 
@@ -42,7 +39,8 @@ namespace Feipder.Controllers
                 /// получаем размеры продукта (false = получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
                 var sizes = _repository.Sizes.FindByProduct(p, false).Where(s => queryParams.Sizes.ToIntArray().Contains(s.Id));
 
-                return new ProductPreview(p) { 
+                return new ProductPreview(p)
+                {
                     Sizes = sizes
                 };
 
@@ -101,7 +99,7 @@ namespace Feipder.Controllers
                     Id = 3,
                     PropertyName = nameof(Size),
                     Data = (from size in sizes
-                            group size by new { size.Id, size.Value, size.Description} into c
+                            group size by new { size.Id, size.Value, size.Description } into c
                             select new ProductPropertyValue()
                             {
                                 Id = c.Key.Id,

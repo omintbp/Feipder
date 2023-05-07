@@ -14,11 +14,11 @@ namespace Feipder.Entities.Attributes
         {
             var regex = new Regex("^[0-9,]*$");
 
-            if(value == null || regex.IsMatch(value.ToString()))
+            if (value == null || regex.IsMatch(value.ToString()))
             {
                 return true;
             }
-         
+
             return false;
 
         }

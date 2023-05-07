@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public string PropertyName { get; set; }
-        public IEnumerable<ProductPropertyValue> Data { get; set;}
+        public IEnumerable<ProductPropertyValue> Data { get; set; }
+
     }
 
     public class ProductPropertyValue

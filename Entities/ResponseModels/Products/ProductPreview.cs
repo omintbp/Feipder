@@ -4,8 +4,8 @@ namespace Feipder.Entities.ResponseModels.Products
 {
     public class ProductPreview
     {
-        public ProductPreview(Product product) 
-        { 
+        public ProductPreview(Product product)
+        {
             Id = product.Id;
             Article = product.Article;
             Name = product.Alias;

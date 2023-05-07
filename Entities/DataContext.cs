@@ -1,5 +1,4 @@
 ﻿using Feipder.Entities.Models;
-using Feipder.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Feipder.Entities
@@ -35,5 +34,6 @@ namespace Feipder.Entities
         public DbSet<Brand> Brands { get; set; } = null!;
         public DbSet<Size> Sizes { get; set; } = null!;
         public DbSet<ProductStorage> Storage { get; set; } = null!;
+        public DbSet<ProductImage> ProductImages { get; set; } = null!;
     }
 }

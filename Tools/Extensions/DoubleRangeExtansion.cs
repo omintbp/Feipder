@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Feipder.Tools.Extensions
+﻿namespace Feipder.Tools.Extensions
 {
     public static class DoubleRangeExtansion
     {

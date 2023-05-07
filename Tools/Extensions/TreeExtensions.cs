@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Feipder.Tools.Extensions
+﻿namespace Feipder.Tools.Extensions
 {
     public static class TreeExtensions
     {

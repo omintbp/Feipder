@@ -3,7 +3,6 @@ using Feipder.Data.Repository;
 using Feipder.Entities;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,7 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 var version = Assembly.GetExecutingAssembly().GetName().Version;
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString()});
+    c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString() });
 });
 
 var app = builder.Build();

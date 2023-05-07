@@ -15,14 +15,14 @@ public partial class Category
     public string? Alias { get; set; }
 
     public int? ParentId { get; set; }
-    
-    public virtual Category? Parent { get; set; }
 
-    public virtual ICollection<Category> Children { get; set; } = new List<Category>();
+    public virtual Category? Parent { get; set; }
 
     public string? Image { get; set; }
 
     public bool IsVisible { get; set; } = false;
+
+    public virtual ICollection<Category> Children { get; set; } = new List<Category>();
 
     [JsonIgnore]
     public ICollection<Product> Products { get; set; } = new List<Product>();

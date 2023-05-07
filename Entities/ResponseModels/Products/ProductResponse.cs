@@ -1,6 +1,4 @@
-﻿using Feipder.Entities.Models;
-
-namespace Feipder.Entities.Models.ResponseModels.Products
+﻿namespace Feipder.Entities.Models.ResponseModels.Products
 {
     public class ProductResponse
     {
