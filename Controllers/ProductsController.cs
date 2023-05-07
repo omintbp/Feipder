@@ -131,7 +131,7 @@ namespace Feipder.Controllers
 
             if(product == null)
             {
-                return NotFound();
+                return NotFound("There is not product with such id");
             }
 
             var sizes = new List<ProductSize>();
@@ -162,6 +162,26 @@ namespace Feipder.Controllers
             };
 
             return Ok(productResponse);
+        }
+
+        [HttpGet("{productId}")]
+        public ActionResult<IEnumerable<ProductSize>> GetProductSizes(int productId)
+        {
+            var product = _repository.Products.FindByCondition(p => p.Id == productId).FirstOrDefault();
+
+            if (product == null)
+            {
+                return NotFound("There is not product with such id");
+            }
+
+            try { 
+                var sizes = _repository.Sizes.FindByProduct(product).ToList();
+                return Ok(sizes);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
     }
 }
