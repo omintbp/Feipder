@@ -23,7 +23,7 @@ namespace Feipder.Controllers
 
         // GET: api/<CategoriesController>
         [HttpGet]
-        public ActionResult<IList<CategoryResponse>> Get()
+        public ActionResult<IList<CategoryNode>> Get()
         {
             if (!_repository.Categories.FindAll().Any())
             {

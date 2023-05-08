@@ -2,8 +2,10 @@
 using Feipder.Data.Repository;
 using Feipder.Entities.Attributes;
 using Feipder.Entities.Models;
+using Feipder.Entities.Models.ResponseModels;
 using Feipder.Tools.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Feipder.Entities.RequestModels
@@ -26,10 +28,11 @@ namespace Feipder.Entities.RequestModels
         public bool Discount { get; set; } = false;
         public bool NewProducts { get; set; } = false;
 
+        public bool InSubCategories { get; set; } = true;
+
         public string Filter { get; set; } = "";
 
         private bool IsPriceValid(Product product) => product.Price.InRange(MinPrice, MaxPrice);
-
         private bool IsBrandsValid(Product product) => Brands == null || Brands.ContainsId(product.Brand.Id);
         private bool IsColorsValid(Product product) => Colors == null || Colors.ContainsId(product.Color.Id);
         private bool IsSizesValid(Product product, IRepositoryWrapper repository)
@@ -54,14 +57,38 @@ namespace Feipder.Entities.RequestModels
                 throw;
             }
         }
-        private bool IsCategoriesValid(Product product) => Categories == null || Categories.ContainsId(product.Category.Id);
-        private bool IsNewProductValid(Product product) => product.IsNew == NewProducts;
-        private bool IsFilterValid(Product product) => product.ContainsIn(Filter);
-        public ProductsParameters()
-        {
 
+        private bool IsCategoriesValid(Product product, IRepositoryWrapper repository) 
+        {
+            if(Categories == null)
+            {
+                return true;
+            }
+
+            if (InSubCategories)
+            {
+                var categoriesIds = Categories.ToIntArray().ToList();
+
+                foreach(var id in categoriesIds)
+                {
+                    var category = new CategoryTree(repository.Categories.FindAll().Include(x => x.Children).Where(x => x.Id == id).ToList());
+
+                    if (category.Contains(product.Category))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            else
+            {
+                return Categories.ContainsId(product.Category.Id);
+            }
         }
 
+        private bool IsNewProductValid(Product product) => product.IsNew == NewProducts;
+        private bool IsFilterValid(Product product) => product.ContainsIn(Filter);
 
         public bool IsProductFits(Product p, IRepositoryWrapper rep)
         {
@@ -71,7 +98,7 @@ namespace Feipder.Entities.RequestModels
                     IsBrandsValid(p) &&
                     IsColorsValid(p) &&
                     IsSizesValid(p, rep) &&
-                    IsCategoriesValid(p) &&
+                    IsCategoriesValid(p, rep) &&
                     IsNewProductValid(p) &&
                     IsFilterValid(p);
 

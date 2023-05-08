@@ -25,7 +25,7 @@ namespace Feipder.Controllers
         [HttpGet]
         public ActionResult<ProductPreviews> GetProducts([FromQuery]ProductsParameters queryParams, [FromQuery]SortMethod sortMethod, 
             [FromQuery] int limit = 20, [FromQuery] int offset = 0, [FromQuery] bool withProperties = false,
-            [FromQuery]bool searchInSubcategories = false, [FromQuery]bool selectAllPossibleSizes = false, [FromQuery]bool selectOnlyAvailableProducts = false)
+           [FromQuery]bool selectAllPossibleSizes = false, [FromQuery]bool selectOnlyAvailableProducts = false)
         {
 
             /// валидация переданных в строке запроса параметров
@@ -56,13 +56,13 @@ namespace Feipder.Controllers
             .ToList();
 
             /// минимальная цена в выборке
-            var minPrice = results.Min(p => p.Price);
+            var minPrice = results.Count == 0 ? 0 : results.Min(p => p.Price);
 
             /// максимальная цена в выборке
-            var maxPrice = results.Max(p => p.Price);
+            var maxPrice = results.Count == 0 ? 0 : results.Max(p => p.Price);
 
             /// количество элементов в выборке
-            var count = results.Count();
+            var count = results.Count;
 
             /// используемые в выборки свойства товаров.
             /// каждое свойство содержит значение и количество товаров, которые данному значению соответствуют.

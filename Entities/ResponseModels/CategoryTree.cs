@@ -1,19 +1,21 @@
-﻿using System.Reflection.Emit;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Reflection.Emit;
 using System.Text.Json.Nodes;
 
 namespace Feipder.Entities.Models.ResponseModels
 {
-    public class ResponseCategoryTree
+    public class CategoryTree
     {
-        private IList<CategoryResponse> _nodes = new List<CategoryResponse>();
+        private IList<CategoryNode> _nodes = new List<CategoryNode>();
 
-        public IList<CategoryResponse> Nodes { get { return _nodes; } }
+        public IList<CategoryNode> Nodes { get { return _nodes; } }
 
-        public ResponseCategoryTree(IList<Category> categories) 
+        public CategoryTree(IList<Category> categories) 
         {
             foreach(var category in categories)
             {
-                var node = new CategoryResponse(category)
+                var node = new CategoryNode(category)
                 {
                     SubCategories = GetSubCategories(category, 1)
                 };
@@ -22,15 +24,15 @@ namespace Feipder.Entities.Models.ResponseModels
             }
         }
 
-        private IList<CategoryResponse> GetSubCategories(Category category, int level)
+        private IList<CategoryNode> GetSubCategories(Category category, int level)
         {
-            var result = new List<CategoryResponse>();
+            var result = new List<CategoryNode>();
 
             if (category.Children.Any())
             {
                 foreach(var child in category.Children)
                 {
-                    var childCategory = new CategoryResponse(child, level)
+                    var childCategory = new CategoryNode(child, level)
                     {
                         SubCategories = GetSubCategories(child, level + 1)
                     };
@@ -40,6 +42,29 @@ namespace Feipder.Entities.Models.ResponseModels
             }
 
             return result;
+        }
+
+        public bool Contains(Category category)
+        {
+            return Contains(category.Id, _nodes);
+        }
+
+        private bool Contains(int categoryId, IList<CategoryNode> nodes)
+        {
+            if(nodes.Count == 0)
+            {
+                return false;
+            }
+
+            foreach(var node in nodes)
+            {
+                if(node.Id == categoryId || Contains(categoryId, node.SubCategories))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Diagnostics.Eventing.Reader;
 
 namespace Feipder.Entities.Models.ResponseModels
 {
-    public class CategoryResponse
+    public class CategoryNode
     {
-        public CategoryResponse(Category category, int level = 0)
+        public CategoryNode(Category category, int level = 0)
         {
             Id = category.Id;
             Name = category.Name;
@@ -23,7 +23,7 @@ namespace Feipder.Entities.Models.ResponseModels
         public string Alias { get; set; }
         [Required]
         public string Image { get; set; }
-        public IList<CategoryResponse> SubCategories { get; set; }
+        public IList<CategoryNode> SubCategories { get; set; }
         public int Level { get; set; }
         public bool IsVisible { get; set; }
     }
