@@ -12,6 +12,6 @@ namespace Feipder.Data.Repository
         }
 
         public override IEnumerable<Category> FindByCondition(Func<Category, bool> expression)
-                => RepositoryContext.Set<Category>().Include(x => x.Parent).Include(x => x.Sizes).Include(x => x.Children).Where(expression);
+                => RepositoryContext.Set<Category>().Include(x => x.Parent).Include(x => x.Sizes).Include(x => x.Children).Include(x => x.Image).Where(expression);
     }
 }

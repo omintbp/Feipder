@@ -21,7 +21,7 @@ namespace Feipder.Controllers
             _repository = repository;
         }
 
-        // GET: api/<CategoriesController>
+        // GET: api/categories/
         [HttpGet]
         public ActionResult<IList<CategoryNode>> Get()
         {
@@ -30,21 +30,64 @@ namespace Feipder.Controllers
                 return NotFound();
             }
 
-            var result = _repository.Categories.FindAll()
+            var categories = _repository.Categories.FindAll()
                 .Include(x => x.Parent)
                 .Include(x => x.Image)
                 .Include(x => x.Children)
                 .ToList();
 
-            var treeView = new CategoryTree(result);
+            var treeView = new CategoryTree(categories);
 
             return Ok(treeView.Nodes);
         }
 
         [HttpGet("{categoryId}")]
-        public ActionResult GetCategory(int categoryId)
+        public ActionResult<IList<CategoryNode>> GetCategory(int categoryId)
         {
-            return Ok();
+            var root = _repository.Categories.FindAll().Include(x => x.Image).Where(x => x.Id == categoryId).FirstOrDefault();
+
+            if (root == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var categories = _repository.Categories.FindAll()
+                    .Include(x => x.Parent)
+                    .Include(x => x.Image)
+                    .Include(x => x.Children)
+                    .ToList();
+
+                var treeView = new CategoryTree(root, categories);
+
+                return Ok(treeView.Nodes);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("to/{categoryId}")]
+        public ActionResult<IList<CategoryNode>> GetPathToCategory(int categoryId)
+        {
+            var category = _repository.Categories.FindByCondition((category) => category.Id == categoryId).FirstOrDefault();
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categories = _repository.Categories.FindAll()
+              .Include(x => x.Parent)
+              .Include(x => x.Image)
+              .Include(x => x.Children)
+              .ToList();
+
+            var treeView = new CategoryTree(category, categories, false);
+
+            return Ok(treeView.Nodes);
         }
 
         private ActionResult GetCategorySizes(int categoryId)
