@@ -12,7 +12,7 @@ namespace Feipder.Entities.ResponseModels.Products
             Name = product.Alias;
             Price = product.Price;
             Brand = product.Brand;
-            PreviewImages = new List<string>();
+            PreviewImage = product.PreviewImage;
             NewProduct = product.IsNew;
             Discount = product.Discount;
             CreatedDate = product.CreatedDate;
@@ -30,15 +30,16 @@ namespace Feipder.Entities.ResponseModels.Products
 
         [Required]
         public double Price { get; set; }
+        
         public bool NewProduct { get; set; } = false;
         
-        public Brand Brand { get; set; }
+        public Brand? Brand { get; set; }
         
-        public List<string> PreviewImages { get; set; } = new List<string>();
+        public ProductPreviewImage? PreviewImage { get; set; } = null!;
         
-        public Color Color { get; set; }
+        public Color? Color { get; set; }
         
-        public Discount Discount { get; set; }
+        public Discount? Discount { get; set; }
         
         public IEnumerable<ProductSize> Sizes { get; set; }
         

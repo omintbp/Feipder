@@ -36,5 +36,6 @@ namespace Feipder.Entities
         public DbSet<Size> Sizes { get; set; } = null!;
         public DbSet<ProductStorage> Storage { get; set; } = null!;
         public DbSet<ProductImage> ProductImages { get; set; } = null!;
+        public DbSet<ProductPreviewImage> ProductsPreviewImages { get; set; } = null!;
     }
 }

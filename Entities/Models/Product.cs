@@ -26,7 +26,7 @@ public partial class Product
 
     public string? Description { get; set; } = null!;
 
-    public string? PreviewImage { get; set; } = null!;
+    public ProductPreviewImage? PreviewImage { get; set; } = null!;
 
     public bool IsVisible { get; set; } = false;
 

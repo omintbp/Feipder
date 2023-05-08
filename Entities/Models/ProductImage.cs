@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Feipder.Entities.Models;
-
-public partial class ProductImage
+﻿namespace Feipder.Entities.Models
 {
-    public int Id { get; set; }
+    public partial class ProductImage : EntityImage<Product>
+    {
+        public ProductImage() : base()
+        {
 
-    public string Link { get; set; } = null!;
-
-    public virtual Product Product { get; set; } = null!;
+        }
+    }
 }
+

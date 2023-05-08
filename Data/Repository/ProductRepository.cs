@@ -14,6 +14,8 @@ namespace Feipder.Data.Repository
             => RepositoryContext.Set<Product>()
                 .Include(x => x.Category)
                 .Include(x => x.Brand)
+                .Include(x => x.ProductImages)
+                .Include(x => x.PreviewImage)
                 .Include(x => x.Color);
 
         public ProductRepository(DataContext context) : base(context) { }
@@ -24,6 +26,8 @@ namespace Feipder.Data.Repository
                 .Include(x => x.Category)
                 .Include(x => x.Brand)
                 .Include(x => x.Color)
+                .Include(x => x.ProductImages)
+                .Include(x => x.PreviewImage)
                 .ToList();
 
             return result.Where(expression);
