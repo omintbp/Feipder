@@ -26,14 +26,14 @@ namespace Feipder.Data.Repository
                 .Take(takeCount)
                 .Where(expression);
 
-        public IEnumerable<Product> FindByCondition(Func<Product, bool> expression, int skipCount, int takeCount, SortMethod sortMethod)
+        public IEnumerable<Product> FindByCondition(Func<Product, bool> expression)
         {
             var result = RepositoryContext.Products
             .Include(x => x.Category)
             .Include(x => x.Brand)
             .Include(x => x.Color).ToList();
 
-            var filteredCollection = result.Where(expression).Skip(skipCount).Take(takeCount).OrderBy(sortMethod).ToList();
+            var filteredCollection = result.Where(expression);
 
             //.Where(expression)
             //.Skip(skipCount)
@@ -44,8 +44,9 @@ namespace Feipder.Data.Repository
             
         }
         
-
+/*
         public override IEnumerable<Product> FindByCondition(Func<Product, bool> expression) =>
             RepositoryContext.Set<Product>().Include(x => x.Category).Include(x => x.Brand).Include(x => x.Color).Where(expression);
-    }
+    */
+     }
 }

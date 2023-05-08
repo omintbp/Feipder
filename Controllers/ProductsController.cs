@@ -24,7 +24,8 @@ namespace Feipder.Controllers
 
         [HttpGet]
         public ActionResult<ProductPreviews> GetProducts([FromQuery]ProductsParameters queryParams, [FromQuery]SortMethod sortMethod, 
-            [FromQuery] int limit = 20, [FromQuery] int offset = 0, [FromQuery] bool withProperties = false)
+            [FromQuery] int limit = 20, [FromQuery] int offset = 0, [FromQuery] bool withProperties = false,
+            [FromQuery]bool searchInSubcategories = false, [FromQuery]bool selectAllPossibleSizes = false, [FromQuery]bool selectOnlyAvailableProducts = false)
         {
 
             /// валидация переданных в строке запроса параметров
@@ -35,19 +36,24 @@ namespace Feipder.Controllers
             }
 
             /// Получаем продукты по переданным фильтрам
-            var results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository), offset, limit, sortMethod).Select(p =>
+            var results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository)).Select(p =>
             {
                 var paramSizes = queryParams.Sizes.ToIntArray();
 
-                /// получаем размеры продукта (false = получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
-                var sizes = _repository.Sizes.FindByProduct(p, false)
+                /// получаем размеры продукта (selectAllPossibeSizes = false =>
+                ///     => получать лишь доступные размеры, т.е. размеры, у которых количество товара > 0)
+                var sizes = _repository.Sizes.FindByProduct(p, selectAllPossibleSizes)
                     .Where(s => paramSizes.Count() == 0 || queryParams.Sizes.ToIntArray().Contains(s.Id));
 
                 return new ProductPreview(p) { 
                     Sizes = sizes
                 };
 
-            }).ToList();
+            }).Where(p => p.Sizes.Any( size => (selectOnlyAvailableProducts && size.Available != 0) || !selectOnlyAvailableProducts))
+            .Skip(offset)
+            .Take(limit)
+            .OrderBy(sortMethod)
+            .ToList();
 
             /// минимальная цена в выборке
             var minPrice = results.Min(p => p.Price);
@@ -102,15 +108,13 @@ namespace Feipder.Controllers
                 {
                     Id = 3,
                     PropertyName = nameof(Size),
-                    Data = (from size in sizes
-                            group size by new { size.Id, size.Value, size.Description} into c
-                            select new ProductPropertyValue()
-                            {
-                                Id = c.Key.Id,
-                                Value = c.Key.Value,
-                                Description = c.Key.Description,
-                                ProductsCount = c.Count()
-                            }).ToList()
+                    Data = sizes.GroupBy(x => x.Id).Select(sl => new ProductPropertyValue()
+                    {
+                        Value = sl.First().Value,
+                        ProductsCount = sl.Count((s) => s.Available != 0),
+                        Id = sl.First().Id,
+                        Description = sl.First().Description
+                    })
                 });
             }
 
@@ -131,7 +135,7 @@ namespace Feipder.Controllers
 
             if(product == null)
             {
-                return NotFound("There is not product with such id");
+                return NotFound("There is no product with such id");
             }
 
             var sizes = new List<ProductSize>();
@@ -164,19 +168,47 @@ namespace Feipder.Controllers
             return Ok(productResponse);
         }
 
-        [HttpGet("{productId}")]
+        [HttpGet("{productId}/sizes")]
         public ActionResult<IEnumerable<ProductSize>> GetProductSizes(int productId)
         {
             var product = _repository.Products.FindByCondition(p => p.Id == productId).FirstOrDefault();
 
             if (product == null)
             {
-                return NotFound("There is not product with such id");
+                return NotFound("There is no product with such id");
             }
 
             try { 
                 var sizes = _repository.Sizes.FindByProduct(product).ToList();
                 return Ok(sizes);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("{categoryId}/recs")]
+        public ActionResult GetRecsProducts(int categoryId, int offset = 0, int limit = 20)
+        {
+            try
+            {
+                var products = _repository.Products.FindByCondition(p => p.Category.Id == categoryId, offset, limit).Select(p =>
+                {
+                    var sizes = _repository.Sizes.FindByProduct(p);
+
+                    return new ProductPreview(p)
+                    {
+                        Sizes = sizes
+                    };
+                }).ToList();
+                
+                if (products.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(products);
             }
             catch (Exception)
             {
