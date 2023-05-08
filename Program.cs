@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -23,6 +24,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseCors(builder => builder.AllowAnyOrigin());
 
 if (app.Environment.IsDevelopment())
 {
