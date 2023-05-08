@@ -17,36 +17,16 @@ namespace Feipder.Data.Repository
                 .Include(x => x.Color);
 
         public ProductRepository(DataContext context) : base(context) { }
-        public IEnumerable<Product> FindByCondition(Func<Product, bool> expression, int skipCount, int takeCount) =>
-            RepositoryContext.Set<Product>()
+
+        public override IEnumerable<Product> FindByCondition(Func<Product, bool> expression)
+        {
+            var result = RepositoryContext.Products
                 .Include(x => x.Category)
                 .Include(x => x.Brand)
                 .Include(x => x.Color)
-                .Skip(skipCount)
-                .Take(takeCount)
-                .Where(expression);
+                .ToList();
 
-        public IEnumerable<Product> FindByCondition(Func<Product, bool> expression)
-        {
-            var result = RepositoryContext.Products
-            .Include(x => x.Category)
-            .Include(x => x.Brand)
-            .Include(x => x.Color).ToList();
-
-            var filteredCollection = result.Where(expression);
-
-            //.Where(expression)
-            //.Skip(skipCount)
-            //.Take(takeCount)
-            //.OrderBy(sortMethod)
-            //.ToList();
-            return filteredCollection;
-            
+            return result.Where(expression);
         }
-        
-/*
-        public override IEnumerable<Product> FindByCondition(Func<Product, bool> expression) =>
-            RepositoryContext.Set<Product>().Include(x => x.Category).Include(x => x.Brand).Include(x => x.Color).Where(expression);
-    */
      }
 }

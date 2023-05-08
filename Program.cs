@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
         var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
         dataContext.Database.EnsureDeleted();
         dataContext.Database.EnsureCreated();
-        dataContext.Seed();
+        dataContext.Seed(scope.ServiceProvider.GetRequiredService<IConfiguration>());
     }
 
     app.UseSwagger();

@@ -1,4 +1,5 @@
 ﻿using Feipder.Entities.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.ResponseModels.Products
 {
@@ -18,16 +19,30 @@ namespace Feipder.Entities.ResponseModels.Products
             Color = product.Color;
         }
 
+        [Required]
         public int Id { get; set; }
+
+        [Required]
         public string Article { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
         public double Price { get; set; }
-        public bool NewProduct { get; set; }
+        public bool NewProduct { get; set; } = false;
+        
         public Brand Brand { get; set; }
+        
         public List<string> PreviewImages { get; set; } = new List<string>();
+        
         public Color Color { get; set; }
+        
         public Discount Discount { get; set; }
+        
         public IEnumerable<ProductSize> Sizes { get; set; }
+        
+        [Required]
         public DateTime CreatedDate { get; set; }
     }
 }

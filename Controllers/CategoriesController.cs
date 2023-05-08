@@ -29,15 +29,25 @@ namespace Feipder.Controllers
             {
                 return NotFound();
             }
-            
-            //var result = _db.Categories.Include(x => x.Children).ToList().Where(x => x.Parent == null).ToList();
-            //var treeView = new ResponseCategoryTree(result);
 
+            var result = _repository.Categories.FindAll()
+                .Include(x => x.Parent)
+                .Include(x => x.Image)
+                .Include(x => x.Children)
+                .ToList();
+
+            var treeView = new CategoryTree(result);
+
+            return Ok(treeView.Nodes);
+        }
+
+        [HttpGet("{categoryId}")]
+        public ActionResult GetCategory(int categoryId)
+        {
             return Ok();
         }
 
-        [HttpGet("{categoryId}/sizes")]
-        public ActionResult GetCategorySizes(int categoryId)
+        private ActionResult GetCategorySizes(int categoryId)
         {
             var category = _repository.Categories.FindByCondition((category) => category.Id == categoryId).FirstOrDefault();
 

@@ -20,7 +20,7 @@ public partial class Category
     [JsonIgnore]
     public virtual Category? Parent { get; set; }
 
-    public string? Image { get; set; } = null!;
+    public virtual CategoryImage? Image { get; set; } = null!;
 
     [JsonIgnore]
     public bool IsVisible { get; set; } = false;

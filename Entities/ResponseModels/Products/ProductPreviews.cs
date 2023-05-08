@@ -16,8 +16,11 @@ namespace Feipder.Entities.ResponseModels.Products
         [Required]
         [Range(0, int.MaxValue)]
         public double MaxPrice { get; set; }
-        
+
+        [Required]
         public ICollection<ProductPreview> Products { get; set; } = new List<ProductPreview>();
+
+        [Required]
         public ICollection<ProductProperty> ProductProperties { get; set; } = new List<ProductProperty>();
     }
 }

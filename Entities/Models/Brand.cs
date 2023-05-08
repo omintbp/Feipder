@@ -18,5 +18,5 @@ public partial class Brand
     public string Logo { get; set; } = null!;
 
     [JsonIgnore]
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

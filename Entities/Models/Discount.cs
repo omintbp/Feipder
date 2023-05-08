@@ -7,6 +7,7 @@ public partial class Discount
     [JsonIgnore]
     public int Id { get; set; }
 
+    [JsonIgnore]
     public int Size { get; set; }
 
     public TimeOnly DateStart { get; set; }

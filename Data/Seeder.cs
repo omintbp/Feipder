@@ -6,12 +6,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Xml.Serialization;
+using static System.Net.WebRequestMethods;
 
 namespace Feipder.Data
 {
     public static class Seeder
     {
-        public static void Seed(this DataContext dataContext)
+        private static string RandomImageRef(string name, int width, int height)
+        {
+            return $"https://loremflickr.com/{width}/{height}/{name}";
+        }
+
+        public static void Seed(this DataContext dataContext, IConfiguration config)
         {
             if (!dataContext.Categories.Any())
             {
@@ -20,100 +26,103 @@ namespace Feipder.Data
                     new Category()
                     {
                         Id= 1,
-                        Name = "Одежда",
+                        Name = "Clothes",
                         Alias = "Одежда",
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 2,
-                        Name = "Обувь",
+                        Name = "Shoes",
                         Alias = "Обувь",
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 3,
-                        Name = "Аксессуары",
+                        Name = "Accessories",
                         Alias = "Аксессуары",
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 4,
-                        Name = "Кроссовки",
+                        Name = "Sneakers",
                         Alias = "Кроссовки",
                         ParentId = 2,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 5,
-                        Name = "Кеды",
+                        Name = "Gumshoes",
                         Alias = "Кеды",
                         ParentId = 2,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 6,
-                        Name = "Джинсы",
+                        Name = "Jeans",
                         Alias = "Джинсы",
                         ParentId = 1,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 7,
-                        Name = "Футболки",
+                        Name = "TShirts",
                         Alias = "Футболки",
                         ParentId = 1,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 8,
-                        Name = "Головные уборы",
+                        Name = "Hats",
                         Alias = "Головные уборы",
                         ParentId = 3,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 9,
-                        Name = "Балаклавы",
+                        Name = "Balaclavas",
                         Alias = "Балаклавы",
                         ParentId = 8,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 10,
-                        Name = "Бейсболки",
+                        Name = "BaseballCaps",
                         Alias = "Бейсболки",
                         ParentId = 8,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     },
                     new Category()
                     {
                         Id= 11,
-                        Name = "Кепки",
+                        Name = "Caps",
                         Alias = "Кепки",
                         ParentId = 8,
-                        Image = "https://otkritkis.com/wp-content/uploads/2022/02/pravila-kot-11.jpg",
                         IsVisible = true
                     }
                 };
+
+                var configImageSection = config.GetSection("ImageGeneration:Categories");
+
+                var width = Convert.ToInt32(configImageSection["Width"]);
+                var height = Convert.ToInt32(configImageSection["Height"]);
+
+                foreach (var category in categories)
+                {
+                    category.Image = new CategoryImage()
+                    {
+                        Name = "RandomImage",
+                        Url = RandomImageRef(category.Name, width, height)
+                    };
+                }
 
                 dataContext.AddRange(categories);
                 dataContext.SaveChanges();
@@ -144,18 +153,18 @@ namespace Feipder.Data
 
                 dataContext.SaveChanges();
 
-                var shoesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Обувь"));
+                var shoesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Shoes"));
 
                 shoesSizes.ForEach(size => shoesCategory?.Sizes.Add(size));
 
-                var shirtCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Футболки"));
+                var shirtCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("TShirts"));
 
                 shirtSizes.ForEach(size => shirtCategory?.Sizes.Add(size));
 
-                var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Одежда"));
+                var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Clothes"));
                 shoesSizes.ForEach(size => clothCategory?.Sizes.Add(size));
                 
-                var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Аксессуары"));
+                var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Accessories"));
                 shoesSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
 
                 dataContext.SaveChanges();

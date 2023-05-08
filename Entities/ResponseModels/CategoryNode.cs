@@ -17,14 +17,20 @@ namespace Feipder.Entities.Models.ResponseModels
         }
 
         public int Id { get; set; }
+        
         [Required]
         public string Name { get; set; }
+        
         [Required]
         public string Alias { get; set; }
+
         [Required]
-        public string Image { get; set; }
+        public CategoryImage Image { get; set; }
+        
         public IList<CategoryNode> SubCategories { get; set; }
+        
         public int Level { get; set; }
+        
         public bool IsVisible { get; set; }
     }
 }
