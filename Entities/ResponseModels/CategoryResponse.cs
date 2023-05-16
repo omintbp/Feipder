@@ -6,7 +6,7 @@ namespace Feipder.Entities.ResponseModels
     public class CategoryResponse
     {
         [Required]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Required]
         [StringLength(100)]

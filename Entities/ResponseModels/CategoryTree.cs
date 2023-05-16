@@ -82,7 +82,7 @@
             return Contains(category.Id, _nodes);
         }
 
-        private bool Contains(int categoryId, IList<CategoryNode> nodes)
+        private bool Contains(int? categoryId, IList<CategoryNode> nodes)
         {
             if(nodes.Count == 0)
             {

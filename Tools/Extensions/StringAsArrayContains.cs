@@ -2,12 +2,12 @@
 {
     public static class StringAsArrayContains
     {
-        public static bool ContainsId(this string str, int id)
+        public static bool ContainsId(this string str, int? id)
         {
             try
             {
                 var ids = str.Split(',').Select(x => Convert.ToInt32(x)).ToList();
-                return ids.Contains(id);
+                return ids.Contains(id ?? 0);
 
             }catch(Exception e)
             {
