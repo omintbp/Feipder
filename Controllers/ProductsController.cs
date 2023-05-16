@@ -169,7 +169,7 @@ namespace Feipder.Controllers
             {
                 Id = product.Id,
                 Article = product.Article,
-                Brand = product.Brand,
+                Brand = new BrandResponse(product.Brand),
                 Category = product.Category,
                 Color = product.Color,
                 Description = product.Description,
