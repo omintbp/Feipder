@@ -13,6 +13,7 @@ namespace Feipder.Data.Repository
         public override IQueryable<Product> FindAll()
             => RepositoryContext.Set<Product>()
                 .Include(x => x.Category)
+                .ThenInclude(x => x.Image)
                 .Include(x => x.Brand)
                 .Include(x => x.ProductImages)
                 .Include(x => x.PreviewImage)
@@ -24,6 +25,7 @@ namespace Feipder.Data.Repository
         {
             var result = RepositoryContext.Products
                 .Include(x => x.Category)
+                .ThenInclude(x => x.Image)
                 .Include(x => x.Brand)
                 .Include(x => x.Color)
                 .Include(x => x.ProductImages)

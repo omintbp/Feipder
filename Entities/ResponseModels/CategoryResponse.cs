@@ -19,6 +19,7 @@ namespace Feipder.Entities.ResponseModels
         {
             Id = category.Id;
             Name = category.Name;
+            Image = category.Image;
         }
     }
 }
