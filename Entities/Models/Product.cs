@@ -30,7 +30,7 @@ public partial class Product
 
     public bool IsVisible { get; set; } = false;
 
-    public bool IsNew { get; set; } = false;
+    public bool IsNew { get; set; }
 
     public virtual Brand? Brand { get; set; } = null!;
 

@@ -189,25 +189,24 @@ namespace Feipder.Data
                                                             .Without(x => x.CreatedDate)
                                                             .Without(x => x.Category));
 
-                var products = fixture.CreateMany<Product>(100).ToList();
+                var products = fixture.CreateMany<Product>(200).ToList();
 
                 var previewSettings = config.GetSection("ImageGeneration:ProductPreview");
                 var productImageSttings = config.GetSection("ImageGeneration:ProductImage");
 
-                var preivewW = Convert.ToInt32(previewSettings["Width"]);
-                var preivewH = Convert.ToInt32(previewSettings["Height"]);
+                var previewW = Convert.ToInt32(previewSettings["Width"]);
+                var previewH = Convert.ToInt32(previewSettings["Height"]);
                 
                 var productW = Convert.ToInt32(productImageSttings["Width"]);
                 var productH = Convert.ToInt32(productImageSttings["Height"]);
 
                 foreach(var p in products)
                 {
-                   
-                  
                     p.Color = colors[random.Next(0, colors.Count)];
                     p.Brand = brands[random.Next(0, brands.Count)];
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
                     p.Price = random.NextDouble() * 1000 + 100;
+                    p.IsNew = random.Next(100) < 20;
 
                     var imageCount = random.Next(1, 7);
                     var productImages = new List<ProductImage>(imageCount);
@@ -218,7 +217,7 @@ namespace Feipder.Data
                         productImages.Add(productImage);
                     }
 
-                    var previewImage = new ProductPreviewImage() { Name = "Random preview image", Url = RandomImageRef($"{p.Category.Name}", productW, preivewH) };
+                    var previewImage = new ProductPreviewImage() { Name = "Random preview image", Url = RandomImageRef($"{p.Category.Name}", previewW, previewH) };
                    
                     p.PreviewImage = previewImage;
                     p.ProductImages = productImages;
@@ -231,7 +230,7 @@ namespace Feipder.Data
             if (!dataContext.Storage.Any())
             {
                 var random = new Random();
-                var storageRowCount = 50;
+                var storageRowCount = 100;
                 var repository = new RepositoryWrapper(dataContext);
 
                 var products = dataContext.Products.Include(x => x.Category).ThenInclude(x => x.Sizes).Include(x => x.Category!.Parent).ToList();

@@ -22,6 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\cr.yandex_crph6fl19i7i7kjorkqa.pubxml" />
+    <None Include="Properties\PublishProfiles\cr.yandex_crph6fl19i7i7kjorkqa1.pubxml" />
+    <None Include="Properties\PublishProfiles\cr.yandex_crpm2beve9823lid67mr.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
