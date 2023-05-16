@@ -170,13 +170,13 @@ namespace Feipder.Controllers
                 Id = product.Id,
                 Article = product.Article,
                 Brand = new BrandResponse(product.Brand),
-                Category = product.Category,
+                Category = new CategoryResponse(product.Category),
                 Color = product.Color,
                 Description = product.Description,
                 Discount = product.Discount,
                 Images = product.ProductImages,
                 IsNew = product.IsNew,
-                Name = product.Alias,
+                Name = product.Name,
                 Price = product.Price,
                 Sizes = sizes
             };

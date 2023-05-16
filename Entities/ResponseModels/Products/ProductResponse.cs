@@ -28,7 +28,7 @@ namespace Feipder.Entities.Models.ResponseModels.Products
 
         public Color? Color { get; set; }
         public BrandResponse? Brand { get; set; }
-        public Category? Category { get; set; }
+        public CategoryResponse? Category { get; set; }
         public Discount? Discount { get; set; }
         public ICollection<ProductSize> Sizes { get; set; } = new List<ProductSize>();
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();

@@ -9,8 +9,7 @@ namespace Feipder.Entities.Models.ResponseModels
         public CategoryNode(Category category, int level = 0)
         {
             Id = category.Id;
-            Name = category.Name;
-            Alias = category.Alias;
+            Name = category.Alias;
             Image = category.Image;
             IsVisible = category.IsVisible;
             Level = level;
@@ -20,9 +19,6 @@ namespace Feipder.Entities.Models.ResponseModels
         
         [Required]
         public string Name { get; set; }
-        
-        [Required]
-        public string Alias { get; set; }
 
         [Required]
         public CategoryImage Image { get; set; }

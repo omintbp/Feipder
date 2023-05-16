@@ -9,10 +9,10 @@ namespace Feipder.Entities.ResponseModels.Products
         { 
             Id = product.Id;
             Article = product.Article;
-            Name = product.Alias;
+            Name = product.Name;
             Price = product.Price;
             Brand = new BrandResponse(product.Brand);
-            PreviewImage = product.PreviewImage;
+            Images = product.ProductImages;
             NewProduct = product.IsNew;
             Discount = product.Discount;
             CreatedDate = product.CreatedDate;
@@ -34,9 +34,9 @@ namespace Feipder.Entities.ResponseModels.Products
         public bool NewProduct { get; set; } = false;
         
         public BrandResponse? Brand { get; set; }
-        
-        public ProductPreviewImage? PreviewImage { get; set; } = null!;
-        
+
+        public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+
         public Color? Color { get; set; }
         
         public Discount? Discount { get; set; }

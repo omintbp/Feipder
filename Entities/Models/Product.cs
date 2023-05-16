@@ -18,7 +18,7 @@ public partial class Product
     public string Title { get; set; } = null!;
 
     [StringLength(70, ErrorMessage = "The size of the alias should not exceed 70 characters")]
-    public string? Alias { get; set; } = null!;
+    public string? Name { get; set; } = null!;
 
     [Required(ErrorMessage = "The product must have a specified price")]
     [Range(0, Double.MaxValue, ErrorMessage = "The price must be greater than 0")]
@@ -30,7 +30,7 @@ public partial class Product
 
     public bool IsVisible { get; set; } = false;
 
-    public bool IsNew { get; set; }
+    public bool IsNew { get; set; } 
 
     public virtual Brand? Brand { get; set; } = null!;
 
@@ -47,6 +47,6 @@ public partial class Product
 
     public bool ContainsIn(string filter) => 
         Category.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)
-                        || (Alias != null && Alias.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                        || (Name != null && Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
                         || Article.Contains(filter, StringComparison.OrdinalIgnoreCase);
 }
