@@ -13,7 +13,7 @@ namespace Feipder.Entities.ResponseModels.Products
             Price = product.Price;
             Brand = new BrandResponse(product.Brand);
             Images = product.ProductImages;
-            NewProduct = product.IsNew;
+            IsNew = product.IsNew;
             Discount = product.Discount;
             CreatedDate = product.CreatedDate;
             Color = product.Color;
@@ -31,7 +31,7 @@ namespace Feipder.Entities.ResponseModels.Products
         [Required]
         public double Price { get; set; }
         
-        public bool NewProduct { get; set; } = false;
+        public bool IsNew { get; set; } = false;
         
         public BrandResponse? Brand { get; set; }
 

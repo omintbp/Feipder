@@ -90,23 +90,5 @@ namespace Feipder.Controllers
             return Ok(treeView.Nodes);
         }
 
-        private ActionResult GetCategorySizes(int categoryId)
-        {
-            var category = _repository.Categories.FindByCondition((category) => category.Id == categoryId).FirstOrDefault();
-
-            if(category == null)
-            {
-                return NotFound();
-            }
-
-            var result = _repository.Sizes.FindByCategory(category).Select((size) => new
-            {
-                size.Id,
-                size.Value,
-                size.Description
-            });
-
-            return Ok(result);
-        }
     }
 }
