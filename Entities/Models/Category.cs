@@ -5,7 +5,7 @@ namespace Feipder.Entities.Models;
 
 public partial class Category
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     [Required(ErrorMessage = "The category name should not be empty")]
     [StringLength(70, ErrorMessage = "The size of the name should not exceed 70 characters")]

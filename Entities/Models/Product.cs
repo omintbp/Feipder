@@ -46,7 +46,7 @@ public partial class Product
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
     public bool ContainsIn(string filter) => 
-        Category.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)
+        Category.Alias.Contains(filter, StringComparison.OrdinalIgnoreCase)
                         || (Name != null && Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
                         || Article.Contains(filter, StringComparison.OrdinalIgnoreCase);
 }

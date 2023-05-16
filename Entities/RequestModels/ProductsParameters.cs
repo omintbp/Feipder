@@ -71,9 +71,17 @@ namespace Feipder.Entities.RequestModels
 
                 foreach(var id in categoriesIds)
                 {
-                    var category = new CategoryTree(repository.Categories.FindAll().Include(x => x.Children).Where(x => x.Id == id).ToList());
+                    var loadedCategories = repository.Categories.FindAll().Include(x => x.Children).ToList();
+                    var root = loadedCategories.Where(x => x.Id == id).FirstOrDefault();
 
-                    if (category.Contains(product.Category))
+                    if(root == null)
+                    {
+                        return false;
+                    }
+
+                    var categoryTree = new CategoryTree(root, loadedCategories);
+
+                    if (categoryTree.Contains(product.Category))
                     {
                         return true;
                     }
@@ -87,7 +95,7 @@ namespace Feipder.Entities.RequestModels
             }
         }
 
-        private bool IsNewProductValid(Product product) => product.IsNew == NewProducts;
+        private bool IsNewProductValid(Product product) => NewProducts ? product.IsNew == NewProducts : true;
         private bool IsFilterValid(Product product) => product.ContainsIn(Filter);
 
         public bool IsProductFits(Product p, IRepositoryWrapper rep)
