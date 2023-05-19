@@ -9,6 +9,7 @@ using Feipder.Entities.ResponseModels.Products;
 using Feipder.Entities.ResponseModels;
 using Feipder.Entities.Models.ResponseModels.Products;
 using Feipder.Entities.Models.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Feipder.Controllers
 {
