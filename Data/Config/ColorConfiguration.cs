@@ -17,7 +17,6 @@ namespace Feipder.Data.Config
 
         private DrColor RandomColor()
         {
-            var rnd = new Random();
             var randomGen = new Random();
             var names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
 
