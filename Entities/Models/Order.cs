@@ -20,15 +20,10 @@ public partial class Order
 
     public TimeOnly DateModified { get; set; }
 
-    public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
+    public virtual Delivery Delivery { get; set; } = null!;
 
     public virtual DeliveryType DeliveryType { get; set; } = null!;
 
-    //public virtual ICollection<OrderPickup> OrderPickups { get; set; } = new List<OrderPickup>();
-
     public virtual OrderStatus OrderStatus { get; set; } = null!;
 
-    //public virtual ICollection<OrdersProduct> OrdersProducts { get; set; } = new List<OrdersProduct>();
-
-    //public virtual User User { get; set; } = null!;
 }

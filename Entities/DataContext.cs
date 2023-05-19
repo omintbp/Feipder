@@ -1,16 +1,18 @@
 ﻿using Feipder.Entities.Models;
 using Feipder.Migrations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Feipder.Entities
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
-        protected readonly IConfiguration Configuration;
+        private readonly IConfiguration _configuration;
 
         public DataContext(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -21,12 +23,14 @@ namespace Feipder.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Category>()
                 .HasOne(s => s.Parent)
                 .WithMany(m => m.Children)
                 .HasForeignKey(e => e.ParentId);
 
             modelBuilder.Entity<Product>().Property(x => x.CreatedDate).HasDefaultValueSql("now()");
+            modelBuilder.Entity<TempUser>().Property(x => x.CreatedDate).HasDefaultValueSql("now()");
         }
 
         public DbSet<Product> Products { get; set; } = null!;
@@ -37,5 +41,6 @@ namespace Feipder.Entities
         public DbSet<ProductStorage> Storage { get; set; } = null!;
         public DbSet<ProductImage> ProductImages { get; set; } = null!;
         public DbSet<ProductPreviewImage> ProductsPreviewImages { get; set; } = null!;
+        public DbSet<TempUser> TempUsers { get; set; } = null;
     }
 }

@@ -1,27 +1,30 @@
 using Feipder.Data;
 using Feipder.Data.Repository;
 using Feipder.Entities;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Identity;
+using Feipder.Entities.Models;
+using Feipder.Tools;
+using Feipder.Tools.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region Services
+
+builder.Services.ConfigureJWTAuthorization(builder.Configuration);
+builder.Services.ConfigureIdentity();
+
+builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+builder.Services.AddScoped<TokenService, TokenService>();
 
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>();
-builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
+builder.Services.ConfigureSwagger();
 
-var version = Assembly.GetExecutingAssembly().GetName().Version;
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString()});
-});
+#endregion
 
 var app = builder.Build();
 
@@ -35,6 +38,11 @@ if (app.Environment.IsDevelopment())
         dataContext.Database.EnsureDeleted();
         dataContext.Database.EnsureCreated();
         dataContext.Seed(scope.ServiceProvider.GetRequiredService<IConfiguration>());
+
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var rolesManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await UsersInitializer.Initialize(userManager, rolesManager);
     }
 
     app.UseSwagger();
@@ -43,6 +51,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+
 
 app.Run();
