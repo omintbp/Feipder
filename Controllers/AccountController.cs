@@ -162,6 +162,7 @@ namespace Feipder.Controllers
                     FirstName = request.FirstName,
                     Email = request.Email,
                     PhoneNumberConfirmed = true,
+                    Basket = new Basket()
                 };
 
                 var result = await _userManager.CreateAsync(user);

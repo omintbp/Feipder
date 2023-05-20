@@ -41,6 +41,9 @@ namespace Feipder.Entities
         public DbSet<ProductStorage> Storage { get; set; } = null!;
         public DbSet<ProductImage> ProductImages { get; set; } = null!;
         public DbSet<ProductPreviewImage> ProductsPreviewImages { get; set; } = null!;
-        public DbSet<TempUser> TempUsers { get; set; } = null;
+        public DbSet<TempUser> TempUsers { get; set; } = null!;
+        public DbSet<Basket> Baskets { get; set; } = null!;
+
+        public DbSet<BasketItem> BasketItems { get; set; } = null!;
     }
 }

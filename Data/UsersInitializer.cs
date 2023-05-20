@@ -29,7 +29,14 @@ namespace Feipder.Data
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                var admin = new User { Email = adminEmail, UserName = adminEmail, PhoneNumber = adminPhone, FirstName = "Админ", LastName = "Админский" };
+                var admin = new User {
+                    Email = adminEmail,
+                    UserName = adminEmail,
+                    PhoneNumber = adminPhone,
+                    FirstName = "Админ",
+                    LastName = "Админский",
+                    Basket = new Basket()
+                };
                 var result = await userManager.CreateAsync(admin);
 
                 if (result.Succeeded)
@@ -40,7 +47,15 @@ namespace Feipder.Data
 
             if (await userManager.FindByNameAsync(guestEmail) == null)
             {
-                var guest = new User { Email = guestEmail, UserName = guestLogin, PhoneNumber = guestPhone, FirstName = "Гость", LastName = "Гостянский" };
+                var guest = new User
+                {
+                    Email = guestEmail,
+                    UserName = guestLogin,
+                    PhoneNumber = guestPhone,
+                    FirstName = "Гость",
+                    LastName = "Гостянский",
+                    Basket = new Basket()
+                };
                 var result = await userManager.CreateAsync(guest);
 
                 if (result.Succeeded)
