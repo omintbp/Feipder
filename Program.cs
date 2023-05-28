@@ -44,10 +44,10 @@ if (app.Environment.IsDevelopment())
 
         await UsersInitializer.Initialize(userManager, rolesManager);
     }
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

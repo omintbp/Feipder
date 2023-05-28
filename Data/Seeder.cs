@@ -181,7 +181,7 @@ namespace Feipder.Data
                 var fixture = new Fixture();
 
                 fixture.Customize<Product>(product => product.Without(x => x.Id)
-                                                            .Without(x => x.ProductColors)
+                                                            .Without(x => x.Colors)
                                                             .Without(x => x.Discount)
                                                             .Without(x => x.Price)
                                                             .Without(x => x.ProductImages)
@@ -242,7 +242,7 @@ namespace Feipder.Data
                     }
 
 
-                    p.ProductColors = selectedColors;
+                    p.Colors = selectedColors;
 
                     var previewImage = new ProductPreviewImage() { Name = "Random preview image", Url = RandomImageRef($"{p.Category.Name}", previewW, previewH) };
                    

@@ -41,7 +41,7 @@ public partial class Product
     public virtual Discount? Discount { get; set; } = null!;
 
     [JsonIgnore]
-    public virtual ICollection<Color> ProductColors { get; set; } = new List<Color>();
+    public virtual ICollection<Color> Colors { get; set; } = new List<Color>();
 
     [JsonIgnore]
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
