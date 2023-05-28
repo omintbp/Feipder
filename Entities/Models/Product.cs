@@ -36,11 +36,12 @@ public partial class Product
 
     public virtual Category Category { get; set; } = null!;
 
-    public virtual Color? Color { get; set; } = null!;
-
     public DateTime CreatedDate { get; set; }
 
     public virtual Discount? Discount { get; set; } = null!;
+
+    [JsonIgnore]
+    public virtual ICollection<Color> ProductColors { get; set; } = new List<Color>();
 
     [JsonIgnore]
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();

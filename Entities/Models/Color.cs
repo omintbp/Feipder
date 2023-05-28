@@ -17,6 +17,8 @@ public partial class Color
     [Required]
     public string Value { get; set; } = null!;
 
+    public ICollection<Product> Products { get; set; } = new List<Product>();
+
     public Color()
     {
 

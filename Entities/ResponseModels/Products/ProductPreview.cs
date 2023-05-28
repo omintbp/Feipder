@@ -16,7 +16,6 @@ namespace Feipder.Entities.ResponseModels.Products
             IsNew = product.IsNew;
             Discount = product.Discount;
             CreatedDate = product.CreatedDate;
-            Color = product.Color;
         }
 
         [Required]
@@ -37,8 +36,8 @@ namespace Feipder.Entities.ResponseModels.Products
 
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 
-        public Color? Color { get; set; }
-        
+        public ICollection<ProductColor> Colors { get; set; } = new List<ProductColor>();
+
         public Discount? Discount { get; set; }
         
         public IEnumerable<ProductSize> Sizes { get; set; }

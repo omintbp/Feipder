@@ -29,8 +29,6 @@ namespace Feipder.Controllers
             try
             {
                 var email = User.FindFirstValue(ClaimTypes.Email);
-
-
                 var managedUser = await _userManager.FindByEmailAsync(email);
                 var user = _context.Users.Where(x => x.Email.Equals(email)).Include(x => x.Basket).FirstOrDefault();
 

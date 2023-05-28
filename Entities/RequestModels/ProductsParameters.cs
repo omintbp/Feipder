@@ -34,7 +34,32 @@ namespace Feipder.Entities.RequestModels
 
         private bool IsPriceValid(Product product) => product.Price.InRange(MinPrice, MaxPrice);
         private bool IsBrandsValid(Product product) => Brands == null || Brands.ContainsId(product.Brand.Id);
-        private bool IsColorsValid(Product product) => Colors == null || Colors.ContainsId(product.Color.Id);
+        private bool IsColorsValid(Product product, DataContext context)
+        {
+            if(Colors == null)
+            {
+                return true;
+            }
+
+            try
+            {
+                // rm repository
+                var productColors = context.Colors.Include(x => x.Products).Where(x => x.Products.Contains(product)).Select(x => x.Id).ToList();
+
+                var colors = Colors.ToIntArray().ToList();
+
+                return colors.Intersect(productColors).Count() != 0;
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return false;
+
+        }
+            //Colors == null || Colors.ContainsId(product.Color.Id);
         private bool IsSizesValid(Product product, IRepositoryWrapper repository)
         {
             if(Sizes == null)
@@ -98,14 +123,14 @@ namespace Feipder.Entities.RequestModels
         private bool IsNewProductValid(Product product) => NewProducts ? product.IsNew == NewProducts : true;
         private bool IsFilterValid(Product product) => product.ContainsIn(Filter);
 
-        public bool IsProductFits(Product p, IRepositoryWrapper rep)
+        public bool IsProductFits(Product p, IRepositoryWrapper rep, DataContext context)
         {
             try
             {
                 var result = IsPriceValid(p) &&
                     IsBrandsValid(p) &&
-                    IsColorsValid(p) &&
                     IsSizesValid(p, rep) &&
+                    IsColorsValid(p, context) &&
                     IsCategoriesValid(p, rep) &&
                     IsNewProductValid(p) &&
                     IsFilterValid(p);

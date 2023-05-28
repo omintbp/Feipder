@@ -9,6 +9,21 @@ namespace Feipder.Data.Repository
         private ICategoryRepository _categories;
         private ISizeRepository _sizes;
         private IProductStorageRepository _storage;
+        private IColorRepository _colors;
+
+
+        public IColorRepository Colors
+        {
+            get
+            {
+                if(_colors == null)
+                {
+                    _colors = new ColorRepository(_context);
+                }
+
+                return _colors;
+            }
+        }
 
         public IProductRepository Products {
             get {

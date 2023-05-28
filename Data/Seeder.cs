@@ -130,42 +130,43 @@ namespace Feipder.Data
 
             if (!dataContext.Sizes.Any())
             {
-                var shoesSizes = new List<Size>();
+               /* var shoesSizes = new List<Size>();
 
                 /// размеры обуви
                 for(var i = 31; i<=46; i++)
                 {
                     shoesSizes.Add(new Size() { Id = i - 30, Value = $"{i}" });
-                }
+                }*/
 
                 var shirtSizes = new List<Size>() {
-                    new Size() { Id = 17, Value = "S" },
-                    new Size() { Id = 18, Value = "M" },
-                    new Size() { Id = 19, Value = "L" },
-                    new Size() { Id = 20, Value = "S" },
+                    new Size() { Id = 17, Value = "XS" },
+                    new Size() { Id = 18, Value = "S" },
+                    new Size() { Id = 19, Value = "M" },
+                    new Size() { Id = 20, Value = "L" },
                     new Size() { Id = 21, Value = "XL" },
                     new Size() { Id = 22, Value = "XXL" }
                 };
 
 
-                dataContext.Sizes.AddRange(shoesSizes);
+                //dataContext.Sizes.AddRange(shoesSizes);
                 dataContext.Sizes.AddRange(shirtSizes);
 
                 dataContext.SaveChanges();
 
                 var shoesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Shoes"));
 
-                shoesSizes.ForEach(size => shoesCategory?.Sizes.Add(size));
+                //shoesSizes.ForEach(size => shoesCategory?.Sizes.Add(size));
+                shirtSizes.ForEach(size => shoesCategory?.Sizes.Add(size));
 
                 var shirtCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("TShirts"));
 
                 shirtSizes.ForEach(size => shirtCategory?.Sizes.Add(size));
 
                 var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Clothes"));
-                shoesSizes.ForEach(size => clothCategory?.Sizes.Add(size));
+                shirtSizes.ForEach(size => clothCategory?.Sizes.Add(size));
                 
                 var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Accessories"));
-                shoesSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
+                shirtSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
 
                 dataContext.SaveChanges();
             }
@@ -180,7 +181,7 @@ namespace Feipder.Data
                 var fixture = new Fixture();
 
                 fixture.Customize<Product>(product => product.Without(x => x.Id)
-                                                            .Without(x => x.Color)
+                                                            .Without(x => x.ProductColors)
                                                             .Without(x => x.Discount)
                                                             .Without(x => x.Price)
                                                             .Without(x => x.ProductImages)
@@ -202,13 +203,17 @@ namespace Feipder.Data
 
                 foreach(var p in products)
                 {
-                    p.Color = colors[random.Next(0, colors.Count)];
                     p.Brand = brands[random.Next(0, brands.Count)];
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
                     p.Price = random.NextDouble() * 1000 + 100;
                     p.IsNew = random.Next(100) < 20;
 
+                    /// количество генерируемых изображений
                     var imageCount = random.Next(1, 7);
+
+                    /// количество генерируемых цветов
+                    var colorsCount = random.Next(3, 6);
+
                     var productImages = new List<ProductImage>(imageCount);
 
                     for (var i = 0; i < imageCount; i++)
@@ -216,6 +221,28 @@ namespace Feipder.Data
                         var productImage = new ProductImage() { Name = "Random product image", Url = RandomImageRef($"{p.Category.Name}", productW, productH) };
                         productImages.Add(productImage);
                     }
+
+                    /// Устанавливаме список цветов для данного товара
+                    
+                    var totalColorsCount = dataContext.Colors.Count();
+                    var selectedColors = new List<Color>();
+
+                    for(var i = 0; i < colorsCount; i++)
+                    {
+                        var rndColorIndex = random.Next(1, totalColorsCount - 1);
+                        var clr = dataContext.Colors.ToList()[rndColorIndex];
+
+                        while (selectedColors.Contains(clr))
+                        {
+                            rndColorIndex = random.Next(1, totalColorsCount - 1);
+                            clr = dataContext.Colors.ToList()[rndColorIndex];
+                        }
+
+                        selectedColors.Add(clr);
+                    }
+
+
+                    p.ProductColors = selectedColors;
 
                     var previewImage = new ProductPreviewImage() { Name = "Random preview image", Url = RandomImageRef($"{p.Category.Name}", previewW, previewH) };
                    
@@ -244,7 +271,7 @@ namespace Feipder.Data
 
                     var sizes = repository.Sizes.FindByCategory(randomProduct.Category).ToList();
 
-                    var sizesCount = random.Next(1, 4);
+                    var sizesCount = random.Next(3, 6);
                     for(var j = 0; j < sizesCount; j++)
                     {
                         var randomSize = sizes[random.Next(0, sizes.Count)];

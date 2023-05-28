@@ -5,6 +5,7 @@
         IProductRepository Products { get; }
         ICategoryRepository Categories { get; }
         ISizeRepository Sizes { get; }
+        IColorRepository Colors { get; }
         IProductStorageRepository Storage { get; }
 
         void Save();

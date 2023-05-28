@@ -10,6 +10,7 @@ using Feipder.Entities.ResponseModels;
 using Feipder.Entities.Models.ResponseModels.Products;
 using Feipder.Entities.Models.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
+using Feipder.Entities;
 
 namespace Feipder.Controllers
 {
@@ -18,10 +19,12 @@ namespace Feipder.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IRepositoryWrapper _repository;
+        private readonly DataContext _context;
 
-        public ProductsController(IRepositoryWrapper repository)
+        public ProductsController(IRepositoryWrapper repository, DataContext context)
         {
             _repository = repository;
+            _context = context;
         }
 
         [HttpGet]
@@ -42,7 +45,7 @@ namespace Feipder.Controllers
             try
             {
                 /// Получаем продукты по переданным фильтрам
-                results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository)).Select(p =>
+                results = _repository.Products.FindByCondition(p => queryParams.IsProductFits(p, _repository, _context)).Select(p =>
                 {
                     var paramSizes = queryParams.Sizes.ToIntArray();
 
@@ -51,9 +54,17 @@ namespace Feipder.Controllers
                     var sizes = _repository.Sizes.FindByProduct(p, allPossibleProperties)
                         .Where(s => paramSizes.Count() == 0 || queryParams.Sizes.ToIntArray().Contains(s.Id));
 
+                    var paramColros = queryParams.Colors.ToIntArray();
+
+                    var colors = _context.Colors.Include(x => x.Products)
+                        .Where(c => c.Products.Contains(p))
+                        .Select(x => new ProductColor(x))
+                        .ToList();
+
                     return new ProductPreview(p)
                     {
-                        Sizes = sizes
+                        Sizes = sizes,
+                        Colors = colors
                     };
 
                 }).Where(p => p.Sizes.Any(size => (selectOnlyAvailableProducts && size.Available != 0) || !selectOnlyAvailableProducts))
@@ -87,19 +98,21 @@ namespace Feipder.Controllers
 
             if (withProperties)
             {
+                /// собираем размеры из выборки для группировки
+                var colors = new List<ProductColor>();
+                results.ForEach(result => colors.AddRange(result.Colors));
+
                 productsProperty.Add(new ProductProperty()
                 {
                     Id = 1,
                     PropertyName = nameof(Color),
-                    Data = (from result in results
-                            group result by new { result.Color!.Id, result.Color.Value, result.Color.Name } into c
-                            select new ProductPropertyValue()
-                            {
-                                Id = c.Key.Id,
-                                Value = c.Key.Value,
-                                Description = c.Key.Name,
-                                ProductsCount = c.Count()
-                            }).ToList()
+                    Data = colors.GroupBy(x => x.Id).Select(sl => new ProductPropertyValue()
+                    {
+                        Value = sl.First().Value,
+                        ProductsCount = sl.Count(),
+                        Id = sl.First().Id,
+                        Description = null
+                    })
                 });
 
                 productsProperty.Add(new ProductProperty()
@@ -146,7 +159,7 @@ namespace Feipder.Controllers
         }
 
         [HttpGet("{productId}")]
-        public ActionResult<ProductResponse> GetProduct(int productId)
+        public async Task<ActionResult<ProductResponse>> GetProduct(int productId)
         {
             var product = _repository.Products.FindByCondition(p => p.Id == productId).FirstOrDefault();
 
@@ -156,10 +169,13 @@ namespace Feipder.Controllers
             }
 
             var sizes = new List<ProductSize>();
+            var colors = new List<ProductColor>();
 
             try
             {
                 sizes = _repository.Sizes.FindByProduct(product).ToList();
+                colors = (await _repository.Colors.FindByProduct(product)).Select(x => new ProductColor(x)).ToList();
+
             }
             catch (Exception)
             {
@@ -172,11 +188,11 @@ namespace Feipder.Controllers
                 Article = product.Article,
                 Brand = new BrandResponse(product.Brand),
                 Category = new CategoryResponse(product.Category),
-                Color = product.Color,
                 Description = product.Description,
                 Discount = product.Discount,
                 Images = product.ProductImages,
                 IsNew = product.IsNew,
+                Colors = colors,
                 Name = product.Name,
                 Price = product.Price,
                 Sizes = sizes
