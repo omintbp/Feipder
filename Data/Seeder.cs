@@ -314,7 +314,7 @@ namespace Feipder.Data
                         Address = new Address()
                         {
                             Index = "690000",
-                            City = "Vladivostok",
+                            City = "Владивосток",
                             Street = "Верхнепортовая",
                             House = "45а"
                         },
@@ -331,6 +331,30 @@ namespace Feipder.Data
                              House = "38 к2"
                          },
                          Coordinates = "43.114544 132.008453"
+                     },
+                     new PickupPoint()
+                     {
+                         WorkHours = workHours,
+                         Address = new Address()
+                         {
+                             Index = "690087",
+                             City = "Владивосток",
+                             Street = "Луговая",
+                             House = "52Б"
+                         },
+                         Coordinates = "43.128631 131.942597"
+                     },
+                     new PickupPoint()
+                     {
+                         WorkHours = workHours,
+                         Address = new Address()
+                         {
+                             Index = "690000",
+                             City = "Владивосток",
+                             Street = "Гоголя",
+                             House = "39а"
+                         },
+                         Coordinates = "43.123935 131.905216"
                      }
                     );
 

@@ -29,7 +29,7 @@ namespace Feipder.Entities.Models
         [StringLength(10)]
         public string? Flat { get; set; } = null;
 
-        public override string ToString() => $"{Index}, {City}, {Street} {House}, {Flat}";
+        public override string ToString() => $"{Index}, {City}, {Street} {House} {Flat}";
 
     }
 }
