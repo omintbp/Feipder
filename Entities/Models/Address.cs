@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.Models
@@ -8,6 +9,7 @@ namespace Feipder.Entities.Models
     /// </summary>
     public class Address
     {
+        [JsonIgnore]
         public int Id { get; set; }
 
         [Required]

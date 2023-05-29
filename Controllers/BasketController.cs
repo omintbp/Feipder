@@ -69,7 +69,7 @@ namespace Feipder.Controllers
                         return BadRequest();
                     }
 
-                    items.Add(new BasketItemResponse()
+                    var itemResponse = new BasketItemResponse()
                     {
                         Id = item.Id,
                         Article = product.Article,
@@ -78,9 +78,17 @@ namespace Feipder.Controllers
                         Count = item.Count,
                         ProductId = product.Id,
                         ProductColor = new ProductColor(color),
-                        ProductSize = new ProductSize(size),
+                        ProductSize = new ProductSize(size)
+                        {
+                            Available = _repository.Sizes.FindByProduct(product, true)
+                                .Where(s => s.Id == size.Id)
+                                .First().Available
+                        },
                         ProductImage = product.ProductImages.FirstOrDefault()
-                    });
+                    };
+
+                    itemResponse.IsLast = itemResponse.ProductSize.Available == 1;
+                    items.Add(itemResponse);
                 }
 
                 var basketResponse = new BasketResponse()
@@ -99,21 +107,26 @@ namespace Feipder.Controllers
             }
         }
 
-        [HttpGet("itemsCount")]
+        [HttpGet("basketStatus")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Получение количества товаров в корзине", 
-            Description = "Можно использовать для отображения количества товаров в иконке корзины")]
-        public async Task<ActionResult> GetProductsCount()
+        [SwaggerOperation(Summary = "Получение краткой информации о корзине", 
+            Description = "Можно использовать для отображения количества товаров в иконке корзины или же при создании заказа")]
+        public async Task<ActionResult<BasketStatusResponse>> GetBasketStatus()
         {
             try
             {
                 var user = await _context.Users.Where(x => x.Email.Equals(User.FindFirstValue(ClaimTypes.Email)))
-                    .Include(x => x.Basket).ThenInclude(x => x.Items).FirstOrDefaultAsync();
+                    .Include(x => x.Basket).ThenInclude(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync();
 
-                return Ok(user.Basket.Items.Count);
+                return Ok(new BasketStatusResponse()
+                {
+                   TotalPrice = user.Basket.Items.Sum(x => x.Count * x.Product.Price),
+                   PriceWithDiscount = user.Basket.Items.Sum(x => x.Count * x.Product.Price),
+                   ProductsCount = user.Basket.Items.Count
+                });
             }
             catch(Exception ex)
             {
@@ -152,7 +165,7 @@ namespace Feipder.Controllers
             try
             {
                 var user = _context.Users.Where(x => x.Email.Equals(User.FindFirstValue(ClaimTypes.Email)))
-                   .Include(x => x.Basket).FirstOrDefault();
+                   .Include(x => x.Basket).ThenInclude(x=>x.Items).FirstOrDefault();
 
                 if(user == null)
                 {

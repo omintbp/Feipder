@@ -26,7 +26,7 @@ namespace Feipder.Entities.RequestModels
         /// Новое количество товара
         /// </summary>
         [Required]
-        [Range(1, Int32.MaxValue)]
+        [Range(0, Int32.MaxValue)]
         public int NewCount { get; set; }
     }
 }

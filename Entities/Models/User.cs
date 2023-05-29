@@ -13,6 +13,8 @@ namespace Feipder.Entities.Models
         public int BasketId { get; set; }
         public Basket Basket { get; set; } = null!;
 
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
         public string FullName { get => $"{FirstName} {LastName}"; }
     }
 }

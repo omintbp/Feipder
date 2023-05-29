@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Feipder.Entities.Models;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.Models;
 
@@ -8,22 +7,37 @@ public partial class Order
 {
     public int Id { get; set; }
 
+    public int UserId { get; set; }
+
+    public User User { get; set; } = null!;
+
+    [Required]
+    [DataType(DataType.EmailAddress)]
     public string Email { get; set; } = null!;
 
-    public string FullName { get; set; } = null!;
+    [Required]
+    [StringLength(50)]
+    public string Name { get; set; } = null!;
 
-    public string Comment { get; set; } = null!;
+    [Required]
+    [DataType(DataType.PhoneNumber)]
+    public string Phone { get; set; } = null!;
 
-    public decimal TotalPrice { get; set; }
+    [StringLength(500)]
+    public string? Comment { get; set; }
 
-    public TimeOnly DateCreated { get; set; }
+    public DateTimeOffset DateCreated { get; set; }
 
-    public TimeOnly DateModified { get; set; }
+    public DateTimeOffset DateModified { get; set; }
 
-    public virtual Delivery Delivery { get; set; } = null!;
+    [Required]
+    public Address Address { get; set; } = null!;
 
-    public virtual DeliveryType DeliveryType { get; set; } = null!;
+    public DeliveryType DeliveryType { get; set; }
 
-    public virtual OrderStatus OrderStatus { get; set; } = null!;
+    public OrderStatus OrderStatus { get; set; }
+
+    [JsonIgnore]
+    public virtual ICollection<OrderItem> Items { get; set;} = new List<OrderItem>();
 
 }

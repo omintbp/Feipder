@@ -36,7 +36,6 @@ namespace Feipder.Controllers
             /// валидация переданных в строке запроса параметров
             if (!ModelState.IsValid)
             {
-                /// response - 400
                 return BadRequest(ModelState);
             }
 

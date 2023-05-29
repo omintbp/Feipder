@@ -17,7 +17,9 @@ builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 builder.Services.AddScoped<TokenService, TokenService>();
 
 builder.Services.AddCors();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter())); ;
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -55,6 +57,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 app.Run();
