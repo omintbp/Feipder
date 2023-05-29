@@ -162,7 +162,9 @@ namespace Feipder.Controllers
                     FirstName = request.FirstName,
                     Email = request.Email,
                     PhoneNumberConfirmed = true,
-                    Basket = new Basket()
+                    Basket = new Basket(),
+                    CreatedDate = DateTimeOffset.UtcNow,
+                    UpdateDate = DateTimeOffset.UtcNow
                 };
 
                 var result = await _userManager.CreateAsync(user);
@@ -259,6 +261,8 @@ namespace Feipder.Controllers
                 {
                     return Unauthorized("код не совпадает");
                 }
+
+                user.LastLoginAttempt = DateTimeOffset.UtcNow;
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var accessToken = _tokenService.CreateToken(user, roles);

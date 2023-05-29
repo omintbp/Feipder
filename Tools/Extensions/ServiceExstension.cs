@@ -3,6 +3,7 @@ using Feipder.Entities.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -71,20 +72,32 @@ namespace Feipder.Tools.Extensions
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement { 
+                    {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                        }
+                });
+                c.TagActionsBy(api =>
                 {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-                }
-            });
+                    if (api.GroupName != null)
+                    {
+                        return new[] { api.GroupName };
+                    }
+                    if (api.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+                    {
+                        return new[] { controllerActionDescriptor.ControllerName };
+                    }
+                    throw new InvalidOperationException("Unable to determine tag for endpoint.");
+                });
+                c.DocInclusionPredicate((name, api) => true);
             });
 
             return result;

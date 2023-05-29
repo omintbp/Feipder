@@ -1,6 +1,7 @@
 ﻿using Feipder.Data.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Feipder.Controllers
 {

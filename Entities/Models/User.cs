@@ -8,6 +8,10 @@ namespace Feipder.Entities.Models
         public string? LastName { get; set; }
 
         public DateTimeOffset? LastLoginAttempt { get; set; }
+
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset UpdateDate { get;set; }
+
         public string? LastCode { get; set; }
 
         public int BasketId { get; set; }

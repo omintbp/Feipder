@@ -34,6 +34,8 @@ namespace Feipder.Data
                     UserName = adminEmail,
                     PhoneNumber = adminPhone,
                     FirstName = "Админ",
+                    UpdateDate = DateTimeOffset.UtcNow,
+                    CreatedDate = DateTimeOffset.UtcNow,
                     LastName = "Админский",
                     Basket = new Basket()
                 };
@@ -54,6 +56,8 @@ namespace Feipder.Data
                     PhoneNumber = guestPhone,
                     FirstName = "Гость",
                     LastName = "Гостянский",
+                    UpdateDate = DateTimeOffset.UtcNow,
+                    CreatedDate = DateTimeOffset.UtcNow,
                     Basket = new Basket()
                 };
                 var result = await userManager.CreateAsync(guest);
