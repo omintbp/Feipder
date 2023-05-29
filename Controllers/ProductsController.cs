@@ -194,6 +194,7 @@ namespace Feipder.Controllers
                 IsNew = product.IsNew,
                 Colors = colors,
                 Name = product.Name,
+                Features = product.Features.Select(x => new ProductFeature() { Value  = x.Value}).ToList(),
                 Price = product.Price,
                 Sizes = sizes
             };

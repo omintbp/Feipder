@@ -1,5 +1,5 @@
 ﻿using Feipder.Entities.Models;
-using Feipder.Entities.ResponseModels;
+using Feipder.Entities.ResponseModels.Products;
 
 namespace Feipder.Data.Repository
 {

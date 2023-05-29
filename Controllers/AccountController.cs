@@ -1,7 +1,7 @@
 ﻿using Feipder.Entities;
 using Feipder.Entities.Models;
 using Feipder.Entities.RequestModels;
-using Feipder.Entities.ResponseModels;
+using Feipder.Entities.ResponseModels.Account;
 using Feipder.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

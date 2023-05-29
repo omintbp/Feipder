@@ -46,6 +46,8 @@ public partial class Product
     [JsonIgnore]
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
+    public virtual ICollection<Feature> Features { get; set; } = new List<Feature>();
+
     public bool ContainsIn(string filter) => 
         Category.Alias.Contains(filter, StringComparison.OrdinalIgnoreCase)
                         || (Name != null && Name.Contains(filter, StringComparison.OrdinalIgnoreCase))

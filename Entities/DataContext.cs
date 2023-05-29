@@ -45,5 +45,7 @@ namespace Feipder.Entities
         public DbSet<Basket> Baskets { get; set; } = null!;
 
         public DbSet<BasketItem> BasketItems { get; set; } = null!;
+        public DbSet<Feature> Features { get; set; } = null!;
+
     }
 }

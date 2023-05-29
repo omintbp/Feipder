@@ -9,5 +9,6 @@ public partial class PickupPoint
 
     public string Address { get; set; } = null!;
 
-    public virtual ICollection<OrderPickup> OrderPickups { get; set; } = new List<OrderPickup>();
+    public string Coordinates { get; set; }
+
 }

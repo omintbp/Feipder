@@ -1,6 +1,6 @@
 ﻿using Feipder.Entities;
 using Feipder.Entities.Models;
-using Feipder.Entities.ResponseModels;
+using Feipder.Entities.ResponseModels.Products;
 using Microsoft.EntityFrameworkCore;
 
 namespace Feipder.Data.Repository

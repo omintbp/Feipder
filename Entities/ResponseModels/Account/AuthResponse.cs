@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Feipder.Entities.ResponseModels
+namespace Feipder.Entities.ResponseModels.Account
 {
     public class AuthResponse
     {
         [Required]
-        [StringLength(16, MinimumLength =6)]
+        [StringLength(16, MinimumLength = 6)]
         public string Username { get; set; } = null!;
 
         public string? FirstName { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Feipder.Entities.Models;
 using Feipder.Entities.ResponseModels;
+using Feipder.Entities.ResponseModels.Products;
 using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.Models.ResponseModels.Products
@@ -33,6 +34,6 @@ namespace Feipder.Entities.Models.ResponseModels.Products
         public ICollection<ProductSize> Sizes { get; set; } = new List<ProductSize>();
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
         public ICollection<ProductColor> Colors { get; set; } = new List<ProductColor>();
-
+        public ICollection<ProductFeature> Features { get; set; } = new List<ProductFeature>();
     }
 }

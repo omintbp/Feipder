@@ -13,6 +13,9 @@ using System.Drawing;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel;
 
+using Feipder.Entities.Models.ResponseModels.Products;
+using Feipder.Entities.ResponseModels.Products;
+
 namespace Feipder.Controllers
 {
     [Route("api/[controller]")]

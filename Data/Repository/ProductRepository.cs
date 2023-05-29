@@ -15,6 +15,7 @@ namespace Feipder.Data.Repository
                 .Include(x => x.Category)
                 .ThenInclude(x => x.Image)
                 .Include(x => x.Brand)
+                .Include(x => x.Features)
                 .Include(x => x.Colors)
                 .Include(x => x.ProductImages)
                 .Include(x => x.PreviewImage);
@@ -27,6 +28,7 @@ namespace Feipder.Data.Repository
                 .Include(x => x.Category)
                 .ThenInclude(x => x.Image)
                 .Include(x => x.Brand)
+                .Include(x => x.Features)
                 .Include(x => x.Colors)
                 .Include(x => x.ProductImages)
                 .Include(x => x.PreviewImage)

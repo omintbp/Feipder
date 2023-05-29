@@ -1,6 +1,6 @@
 ﻿using Feipder.Entities.Models;
 
-namespace Feipder.Entities.ResponseModels
+namespace Feipder.Entities.ResponseModels.Products
 {
     public class ProductSize
     {
@@ -10,7 +10,7 @@ namespace Feipder.Entities.ResponseModels
         public int Available { get; set; }
         public bool OnFitting { get; set; } = false;
         public bool Subscribed { get; set; } = false;
-    
+
         public ProductSize()
         {
 

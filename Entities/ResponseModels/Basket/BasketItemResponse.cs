@@ -1,7 +1,8 @@
 ﻿using Feipder.Entities.Models;
+using Feipder.Entities.ResponseModels.Products;
 using System.ComponentModel.DataAnnotations;
 
-namespace Feipder.Entities.ResponseModels
+namespace Feipder.Entities.ResponseModels.Basket
 {
     public class BasketItemResponse
     {
@@ -13,7 +14,7 @@ namespace Feipder.Entities.ResponseModels
         public string Name { get; set; } = null!;
 
         [Required]
-        [Range(0, Double.MaxValue)]
+        [Range(0, double.MaxValue)]
         public double Price { get; set; }
 
         [Required]
@@ -32,7 +33,7 @@ namespace Feipder.Entities.ResponseModels
         public bool IsLast { get; set; } = false;
 
         [Required]
-        [Range(1, Int32.MaxValue)]
+        [Range(1, int.MaxValue)]
         public int Count { get; set; }
     }
 }

@@ -130,13 +130,13 @@ namespace Feipder.Data
 
             if (!dataContext.Sizes.Any())
             {
-               /* var shoesSizes = new List<Size>();
+                /* var shoesSizes = new List<Size>();
 
-                /// размеры обуви
-                for(var i = 31; i<=46; i++)
-                {
-                    shoesSizes.Add(new Size() { Id = i - 30, Value = $"{i}" });
-                }*/
+                 /// размеры обуви
+                 for(var i = 31; i<=46; i++)
+                 {
+                     shoesSizes.Add(new Size() { Id = i - 30, Value = $"{i}" });
+                 }*/
 
                 var shirtSizes = new List<Size>() {
                     new Size() { Id = 17, Value = "XS" },
@@ -164,7 +164,7 @@ namespace Feipder.Data
 
                 var clothCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Clothes"));
                 shirtSizes.ForEach(size => clothCategory?.Sizes.Add(size));
-                
+
                 var accessoriesCategory = dataContext.Categories.FirstOrDefault((c) => c.Name.Equals("Accessories"));
                 shirtSizes.ForEach(size => accessoriesCategory?.Sizes.Add(size));
 
@@ -187,6 +187,7 @@ namespace Feipder.Data
                                                             .Without(x => x.ProductImages)
                                                             .Without(x => x.PreviewImage)
                                                             .Without(x => x.Brand)
+                                                            .Without(x => x.Features)
                                                             .Without(x => x.CreatedDate)
                                                             .Without(x => x.Category));
 
@@ -197,11 +198,11 @@ namespace Feipder.Data
 
                 var previewW = Convert.ToInt32(previewSettings["Width"]);
                 var previewH = Convert.ToInt32(previewSettings["Height"]);
-                
+
                 var productW = Convert.ToInt32(productImageSttings["Width"]);
                 var productH = Convert.ToInt32(productImageSttings["Height"]);
 
-                foreach(var p in products)
+                foreach (var p in products)
                 {
                     p.Brand = brands[random.Next(0, brands.Count)];
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
@@ -214,6 +215,9 @@ namespace Feipder.Data
                     /// количество генерируемых цветов
                     var colorsCount = random.Next(3, 6);
 
+                    /// количество характеристик продукта
+                    var featuresCount = random.Next(2, 6);
+
                     var productImages = new List<ProductImage>(imageCount);
 
                     for (var i = 0; i < imageCount; i++)
@@ -223,11 +227,11 @@ namespace Feipder.Data
                     }
 
                     /// Устанавливаме список цветов для данного товара
-                    
+
                     var totalColorsCount = dataContext.Colors.Count();
                     var selectedColors = new List<Color>();
 
-                    for(var i = 0; i < colorsCount; i++)
+                    for (var i = 0; i < colorsCount; i++)
                     {
                         var rndColorIndex = random.Next(1, totalColorsCount - 1);
                         var clr = dataContext.Colors.ToList()[rndColorIndex];
@@ -241,11 +245,17 @@ namespace Feipder.Data
                         selectedColors.Add(clr);
                     }
 
-
                     p.Colors = selectedColors;
 
+                    fixture.Customize<Feature>(x => x.Without(x => x.Id)
+                            .Without(x => x.ProductId)
+                            .Without(x => x.Product));
+                    var features = fixture.CreateMany<Feature>(featuresCount).ToList();
+
+                    p.Features = features;
+
                     var previewImage = new ProductPreviewImage() { Name = "Random preview image", Url = RandomImageRef($"{p.Category.Name}", previewW, previewH) };
-                   
+
                     p.PreviewImage = previewImage;
                     p.ProductImages = productImages;
                 }
@@ -262,7 +272,7 @@ namespace Feipder.Data
 
                 var products = dataContext.Products.Include(x => x.Category).ThenInclude(x => x.Sizes).Include(x => x.Category!.Parent).ToList();
 
-                for(var i = 0; i < storageRowCount; i++)
+                for (var i = 0; i < storageRowCount; i++)
                 {
                     var productIndex = random.Next(0, products.Count);
                     var randomProduct = products[productIndex];
@@ -272,7 +282,7 @@ namespace Feipder.Data
                     var sizes = repository.Sizes.FindByCategory(randomProduct.Category).ToList();
 
                     var sizesCount = random.Next(3, 6);
-                    for(var j = 0; j < sizesCount; j++)
+                    for (var j = 0; j < sizesCount; j++)
                     {
                         var randomSize = sizes[random.Next(0, sizes.Count)];
                         sizes.Remove(randomSize);
