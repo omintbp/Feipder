@@ -76,10 +76,10 @@ namespace Feipder.Controllers
             {
                 return StatusCode(500);
             }
-            
-            if(results.Count == 0)
+
+            if (!results.Any())
             {
-                return NotFound();
+                return Ok(new ProductPreviews());
             }
 
             /// минимальная цена в выборке
