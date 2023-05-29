@@ -44,7 +44,7 @@ namespace Feipder.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Запрос кода подтверждения для номера, который используется при регистрации", 
             Description = "Сам код ждать не стоит, поскольку он никогда не придёт (если время будет, то это можно будет сделать, но не уверен, что это время будет)")]
-        public async Task<IActionResult> RegistrationCall([FromBody, DataType(DataType.PhoneNumber)] string phoneNumber)
+        public async Task<IActionResult> RegistrationCall([FromBody]RegistrationCallRequest request)
         {
             if(!ModelState.IsValid) 
             {
@@ -54,7 +54,7 @@ namespace Feipder.Controllers
             /// сохраняем попытку подтверждения и код, который пользователь должен получить через смс
             try
             {
-                var isAlreadyExist = await _context.Users.AnyAsync(x => x.PhoneNumber!.Equals(phoneNumber));
+                var isAlreadyExist = await _context.Users.AnyAsync(x => x.PhoneNumber!.Equals(request.PhoneNumber));
 
                 if (isAlreadyExist)
                 {
@@ -63,7 +63,7 @@ namespace Feipder.Controllers
 
                 var tempUser = await _context.TempUsers.AddAsync(new TempUser()
                 {
-                    PhoneNumber = phoneNumber,
+                    PhoneNumber = request.PhoneNumber,
                     ApproveCode = "0000"
                 });
 
@@ -196,7 +196,7 @@ namespace Feipder.Controllers
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> AuthCall([FromBody, DataType(DataType.PhoneNumber)] string phoneNumber)
+        public async Task<ActionResult> AuthCall([FromBody]AuthCallRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -205,7 +205,7 @@ namespace Feipder.Controllers
 
             try
             {
-                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(phoneNumber)).FirstOrDefaultAsync();
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(request.PhoneNumber)).FirstOrDefaultAsync();
 
                 if(user == null)
                 {
