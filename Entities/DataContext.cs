@@ -47,5 +47,9 @@ namespace Feipder.Entities
         public DbSet<BasketItem> BasketItems { get; set; } = null!;
         public DbSet<Feature> Features { get; set; } = null!;
 
+        public DbSet<WorkHour> WorkHours { get; set; } = null!;
+        public DbSet<PickupPoint> PickupPoints { get; set; } = null!;
+        public DbSet<Address> Addresses { get; set; } = null!;
+
     }
 }

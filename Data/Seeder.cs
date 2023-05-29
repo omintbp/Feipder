@@ -302,6 +302,40 @@ namespace Feipder.Data
 
                 dataContext.SaveChanges();
             }
+
+            if (!dataContext.PickupPoints.Any())
+            {
+                var workHours = dataContext.WorkHours.ToList();
+
+                dataContext.PickupPoints.AddRange(
+                    new PickupPoint()
+                    {
+                        WorkHours = workHours,
+                        Address = new Address()
+                        {
+                            Index = "690000",
+                            City = "Vladivostok",
+                            Street = "Верхнепортовая",
+                            House = "45а"
+                        },
+                        Coordinates = "43.098688 131.863459"
+                    },
+                     new PickupPoint()
+                     {
+                         WorkHours = workHours,
+                         Address = new Address()
+                         {
+                             Index = "690000",
+                             City = "Владивосток",
+                             Street = "Щитовая",
+                             House = "38 к2"
+                         },
+                         Coordinates = "43.114544 132.008453"
+                     }
+                    );
+
+                dataContext.SaveChanges();
+            }
         }
     }
 }
