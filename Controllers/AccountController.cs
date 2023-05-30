@@ -156,7 +156,7 @@ namespace Feipder.Controllers
 
                 var user = new User()
                 {
-                    UserName = request.Username,
+                    UserName = request.Email,
                     PhoneNumber = request.PhoneNumber,
                     LastName = request.LastName,
                     FirstName = request.FirstName,

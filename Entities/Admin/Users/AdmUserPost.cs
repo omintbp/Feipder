@@ -1,21 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AutoFixture;
+using System.ComponentModel.DataAnnotations;
 
 namespace Feipder.Entities.Admin.Users
 {
-    public class AdmPanelUserResponse
+    public class AdmUserPost
     {
-        public Guid Id { get; set; }
-
-        public DateTimeOffset RegistrationDate { get; set; }
-
-        public DateTimeOffset UpdateDate { get; set; }
-
         [Required]
-        [StringLength(50)]
         public string FirstName { get; set; } = null!;
 
         [Required]
-        [StringLength(50)]
         public string LastName { get; set; } = null!;
 
         [Required]

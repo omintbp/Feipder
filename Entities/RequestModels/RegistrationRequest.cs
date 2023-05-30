@@ -8,10 +8,6 @@ namespace Feipder.Entities.RequestModels
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = null!;
         
-        [Required]
-        [StringLength(15, ErrorMessage = "Your username is limited to {2} to {1} characters", MinimumLength = 6)]
-        public string Username { get; set; } = null!;
-
         [StringLength(15, MinimumLength = 0)]
         public string? FirstName { get; set; }
 
