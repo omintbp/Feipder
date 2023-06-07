@@ -44,6 +44,8 @@ namespace Feipder.Entities
         public DbSet<TempUser> TempUsers { get; set; } = null!;
         public DbSet<Basket> Baskets { get; set; } = null!;
 
+        public DbSet<FavoriteProduct> FavoriteProducts { get; set; } = null!;
+
         public DbSet<BasketItem> BasketItems { get; set; } = null!;
         public DbSet<Feature> Features { get; set; } = null!;
 

@@ -74,7 +74,7 @@ namespace Feipder.Controllers.Admin
             try
             {
                 var guests = await _userManager.GetUsersInRoleAsync("guest");
-                var user = guests.FirstOrDefault(x => x.Id.Equals(id));
+                var user = guests.FirstOrDefault(x => Guid.Parse(x.Id) == id);
 
                 if(user == null)
                 {
@@ -145,7 +145,7 @@ namespace Feipder.Controllers.Admin
             try
             {
                 var usersResult = await _userManager.GetUsersInRoleAsync("admin");
-                var user = usersResult.FirstOrDefault(x => x.Id.Equals(id));
+                var user = usersResult.FirstOrDefault(x => Guid.Parse(x.Id) == id);
 
                 if(user == null)
                 {
