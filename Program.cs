@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Feipder.Entities.Models;
 using Feipder.Tools;
 using Feipder.Tools.Extensions;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +19,12 @@ builder.Services.AddScoped<TokenService, TokenService>();
 
 builder.Services.AddCors();
 builder.Services.AddControllers()
-    .AddNewtonsoftJson(options =>
-        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter())); ;
+   .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+
+    });
+
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddEndpointsApiExplorer();

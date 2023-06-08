@@ -30,10 +30,18 @@ namespace Feipder.Entities.ResponseModels.Basket
 
         public ProductSize? ProductSize { get; set; } = null!;
 
+        public BrandResponse? Brand { get; set; } = null!;
+
+        public CategoryResponse? Category { get; set; } = null!;
+
         public bool IsLast { get; set; } = false;
 
         [Required]
         [Range(1, int.MaxValue)]
         public int Count { get; set; }
+
+        [Required]
+        [Range(0, Int32.MaxValue)]
+        public int Available { get; set; }
     }
 }

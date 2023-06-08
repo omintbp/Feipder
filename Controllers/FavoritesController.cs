@@ -35,7 +35,7 @@ namespace Feipder.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [SwaggerOperation(Summary = "Получнеие списка избранных товаров текущего пользователя")]
-        public async Task<ActionResult<IEnumerable<ProductPreview>>> GetFavorites([FromQuery]int offset = 0, [FromQuery]int limit = 0)
+        public async Task<ActionResult<IEnumerable<ProductPreview>>> GetFavorites([FromQuery]int offset = 0, [FromQuery]int limit = 20)
         {
             try
             {

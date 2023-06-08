@@ -13,8 +13,11 @@ using System.Drawing;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel;
 
+using Feipder.Tools;
+
 using Feipder.Entities.Models.ResponseModels.Products;
 using Feipder.Entities.ResponseModels.Products;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Feipder.Controllers
 {
@@ -32,6 +35,7 @@ namespace Feipder.Controllers
             _context = context;
             _repository = repository;
         }
+
 
         [HttpGet]
         [Authorize]
@@ -55,7 +59,6 @@ namespace Feipder.Controllers
                     return BadRequest();
                 }
 
-
                 var items = new List<BasketItemResponse>();
 
                 foreach (var item in user.Basket.Items)
@@ -69,6 +72,10 @@ namespace Feipder.Controllers
                         return BadRequest();
                     }
 
+                    var available = _repository.Sizes.FindByProduct(product, true)
+                              .Where(s => s.Id == size.Id)
+                              .First().Available;
+
                     var itemResponse = new BasketItemResponse()
                     {
                         Id = item.Id,
@@ -80,10 +87,9 @@ namespace Feipder.Controllers
                         ProductColor = new ProductColor(color),
                         ProductSize = new ProductSize(size)
                         {
-                            Available = _repository.Sizes.FindByProduct(product, true)
-                                .Where(s => s.Id == size.Id)
-                                .First().Available
+                            Available = available
                         },
+                        Available = available,
                         ProductImage = product.ProductImages.FirstOrDefault()
                     };
 
@@ -133,19 +139,98 @@ namespace Feipder.Controllers
                 return StatusCode(500);
             }
         }
-
-        [Authorize]
+        
+        [HttpPost("basketInfo")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [SwaggerOperation(Summary = "Получение актуальной информации о корзине неавторизованного пользователя",
-            Description = "В т.з. есть пунктик насчет того, что корзина может стать неактуально, " +
-            "из-за чего есть необходимость получать её актуальное состояние у неавторизованного пользователя. " +
-            "Если в конце время останется, то можно это реализовать, а то я чувствую, что писанины тут будет много")]
-        [HttpGet("itemsStatus")]
-        public async Task<IActionResult> GetProductsStatus()
+        [SwaggerOperation(Summary = "Посчитать актуальную информацию о корзине неавторизованного пользователя",
+            Description = "Посчитать итоговую информацию для корзины по переданным товарам")]
+        public ActionResult<BasketResponse> CalculateBasket([FromBody]ItemsStatusRequest request)
         {
-            return Ok();
+            try
+            {
+                var response = new BasketResponse();
+
+                if (!request.Items.Any())
+                {
+                    return Ok(response);
+                }
+                var basketItems = new List<BasketItemResponse>();
+
+                var index = 0;
+
+                foreach (var item in request.Items)
+                {
+                    var product = _repository.Products.FindByCondition(x => x.Id == item.ProductId).FirstOrDefault();
+                    var size = _repository.Sizes.FindByCondition(x => x.Id == item.SizeId).FirstOrDefault();
+                    var color = _repository.Colors.FindByCondition(x => x.Id == item.ColorId).FirstOrDefault();
+
+                    if (color == null)
+                    {
+                        return BadRequest($"Цвет с id = {item.SizeId} не найден");
+                    }
+
+                    if (size == null)
+                    {
+                        return BadRequest($"Размер с id = {item.SizeId} не найден");
+                    }
+
+                    if (product == null)
+                    {
+                        return BadRequest($"Продукт с id = {item.ProductId} не найден");
+                    }
+
+                    var sizes = _repository.Sizes.FindByProduct(product, true).ToList();
+
+                    if (!sizes.Any(x => x.Id == size.Id))
+                    {
+                        return BadRequest($"У продукта id = {product.Id} не существует размера с id = {size.Id}");
+                    }
+                    
+                    if(!product.Colors.Any(x => x.Id == color.Id))
+                    {
+                        return BadRequest($"У продукта id = {product.Id} не существует цвета с id = {color.Id}");
+                    }
+
+                    var available = _repository.Sizes.FindByProduct(product, true)
+                                .Where(s => s.Id == size.Id)
+                                .First().Available;
+
+                    var itemResponse = new BasketItemResponse()
+                    {
+                        Id = index++,
+                        Article = product.Article,
+                        Name = product.Name,
+                        Price = product.Price,
+                        Count = item.Count,
+                        Category = new CategoryResponse(product.Category),
+                        Brand = new BrandResponse(product.Brand),
+                        ProductId = product.Id,
+                        ProductColor = new ProductColor(color),
+                        ProductSize = new ProductSize(size)
+                        {
+                            Available = available
+                        },
+                        Available = available,
+                        ProductImage = product.ProductImages.FirstOrDefault()
+                    };
+
+                    itemResponse.IsLast = itemResponse.Available == 1;
+                    basketItems.Add(itemResponse);
+                }
+
+                response.Items = basketItems;
+                response.DiscountPrice = 0;
+                response.ItemsCount = basketItems.Count;
+                response.TotalPrice = basketItems.Sum(x => x.Price * x.Count);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
