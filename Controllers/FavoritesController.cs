@@ -173,7 +173,11 @@ namespace Feipder.Controllers
                     .Select(x =>
                     {
                         var product = _repository.Products.FindByCondition(p => p.Id == x.ProductId).First();
-                        return new ProductPreview(product);
+                        var sizes = _repository.Sizes.FindByProduct(product, false);
+                        return new ProductPreview(product)
+                        {
+                            Sizes = sizes
+                        };
                     }).ToList();
 
                 return products;

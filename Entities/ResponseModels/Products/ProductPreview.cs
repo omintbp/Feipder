@@ -12,6 +12,7 @@ namespace Feipder.Entities.ResponseModels.Products
             Name = product.Name;
             Price = product.Price;
             Brand = new BrandResponse(product.Brand);
+            Category = new CategoryResponse(product.Category);
             Images = product.ProductImages;
             IsNew = product.IsNew;
             Discount = product.Discount;
@@ -33,6 +34,8 @@ namespace Feipder.Entities.ResponseModels.Products
         public bool IsNew { get; set; } = false;
         
         public BrandResponse? Brand { get; set; }
+
+        public CategoryResponse? Category { get; set; }
 
         public ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
 
