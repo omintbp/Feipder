@@ -6,6 +6,7 @@ using Feipder.Entities.Models;
 using Feipder.Tools;
 using Feipder.Tools.Extensions;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.ConfigureSwagger();
+builder.Services.AddDirectoryBrowser();
+builder.Services.AddHttpContextAccessor();
 
 #endregion
 
@@ -53,10 +56,13 @@ if (app.Environment.IsDevelopment())
     }
 }
 
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseFileServer(enableDirectoryBrowsing: true);
 
 app.UseAuthentication();
 app.UseAuthorization();

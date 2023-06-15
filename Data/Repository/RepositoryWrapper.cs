@@ -11,6 +11,20 @@ namespace Feipder.Data.Repository
         private IProductStorageRepository _storage;
         private IColorRepository _colors;
 
+        private ImageRepository _images;
+
+        public ImageRepository Images
+        {
+            get
+            {
+                if(_images == null)
+                {
+                    _images = new ImageRepository();
+                }
+
+                return _images;
+            }
+        }
 
         public IColorRepository Colors
         {

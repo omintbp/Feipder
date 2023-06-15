@@ -173,7 +173,7 @@ namespace Feipder.Controllers
             try
             {
                 sizes = _repository.Sizes.FindByProduct(product).ToList();
-                colors = (await _repository.Colors.FindByProduct(product)).Select(x => new ProductColor(x)).ToList();
+                colors = _repository.Colors.FindByProduct(product).Select(x => new ProductColor(x)).ToList();
 
             }
             catch (Exception)
@@ -241,7 +241,12 @@ namespace Feipder.Controllers
 
                 var products = _repository.Products.FindByCondition(p => categoryTree.Contains(p.Category))
                     .ToList()
-                    .Select(p => new ProductPreview(p) { Sizes = _repository.Sizes.FindByProduct(p, false) } )
+                    .Select(p => new ProductPreview(p)
+                    {
+                        Sizes = _repository.Sizes.FindByProduct(p, false),
+                        Colors = _repository.Colors.FindByProduct(p).Select(x => new ProductColor(x)).ToList()
+                    }
+                    )
                     .Skip(offset)
                     .Take(limit)
                     .ToList();

@@ -8,6 +8,8 @@
         IColorRepository Colors { get; }
         IProductStorageRepository Storage { get; }
 
+        ImageRepository Images { get;}
+
         void Save();
     }
 }

@@ -7,7 +7,7 @@
     <UserSecretsId>d6816868-9c2c-439a-996b-d1b570f6a023</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <Version>1.6.2.0</Version>
+    <Version>1.6.4.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,6 +48,19 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\Admin\SiteSettings\" />
+    <Folder Include="Entities\Admin\Categories\" />
+    <Folder Include="wwwroot\categories\" />
+    <Folder Include="wwwroot\brands\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+      <Content Include="wwwroot\*">
+          <CopyToPublishDirectory>always</CopyToPublishDirectory>
+      </Content>
   </ItemGroup>
 
 </Project>

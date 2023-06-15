@@ -5,6 +5,6 @@ namespace Feipder.Data.Repository
 {
     public interface IColorRepository : IRepositoryBase<Color>
     {
-        Task<IEnumerable<Color>> FindByProduct(Product product);
+        IEnumerable<Color> FindByProduct(Product product);
     }
 }

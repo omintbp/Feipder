@@ -267,7 +267,7 @@ namespace Feipder.Data
             if (!dataContext.Storage.Any())
             {
                 var random = new Random();
-                var storageRowCount = 100;
+                var storageRowCount = 200;
                 var repository = new RepositoryWrapper(dataContext);
 
                 var products = dataContext.Products.Include(x => x.Category).ThenInclude(x => x.Sizes).Include(x => x.Category!.Parent).ToList();
@@ -359,6 +359,35 @@ namespace Feipder.Data
                     );
 
                 dataContext.SaveChanges();
+            }
+            if (!dataContext.LandingPages.Any())
+            {
+                dataContext.LandingPages.Add(new LandingPage()
+                {
+                    LeftImage = RandomImageRef("landingimageleft", 1000, 800),
+                    RightImage = RandomImageRef("landingimageleft", 1000, 800),
+                    Subtitle = "Some subtitle"
+                });
+
+                dataContext.SaveChanges();
+            }
+
+            if (!dataContext.Contacts.Any())
+            {
+                dataContext.Contacts.Add(new Contact()
+                {
+                    VK = "https://vk.com/",
+                    PhoneWA = "+7 (423) 263-93-06",
+                    Phone = "+7 (423) 263-53-48",
+                    Address = "ул. Шепеткова, 14, Владивосток",
+                    WorkTime = "Круглосуточно",
+                    Avito = "https://avi.kz/",
+                    Coords = "43.112895 131.939437",
+                    Email = "gkpbvlad@ya.ru",
+                    Telegram = "https://web.telegram.org/k/",
+                    Instagram = "https://www.instagram.com/",
+                    YouTube = "https://www.youtube.com/watch?v=O-Vgxj4aZB4"
+                });
             }
         }
     }

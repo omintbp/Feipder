@@ -56,6 +56,8 @@ namespace Feipder.Entities
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
 
+        public DbSet<Contact> Contacts { get; set; } = null!;
+        public DbSet<LandingPage> LandingPages { get; set; } = null!;
 
     }
 }

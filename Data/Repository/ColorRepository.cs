@@ -11,7 +11,7 @@ namespace Feipder.Data.Repository
 
         }
 
-        public async Task<IEnumerable<Color>> FindByProduct(Product product)
-            => await RepositoryContext.Colors.Include(x => x.Products).Where(x => x.Products.Contains(product)).ToListAsync();
+        public IEnumerable<Color> FindByProduct(Product product)
+            => RepositoryContext.Colors.Include(x => x.Products).Where(x => x.Products.Contains(product)).ToList();
     }
 }
