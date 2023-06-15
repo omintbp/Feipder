@@ -17,7 +17,7 @@ namespace Feipder.Entities.ResponseModels.Orders
         public string Size { get; set; } = null!;
 
         [Range(0, double.MaxValue)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Range(0, Int32.MaxValue)]
         public int Count { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Bogus;
 using Feipder.Data.Repository;
 using Feipder.Entities;
 using Feipder.Entities.Models;
@@ -180,7 +181,15 @@ namespace Feipder.Data
                 var random = new Random();
                 var fixture = new Fixture();
 
-                fixture.Customize<Product>(product => product.Without(x => x.Id)
+                var customerFaker = new Faker<Product>("ru")
+                    .RuleFor(c => c.Article, f => f.Random.Replace("###-##-####"))
+                    .RuleFor(c => c.Name, f => f.Commerce.ProductName())
+                    .RuleFor(c => c.Description, f => f.Commerce.ProductDescription())
+                    .RuleFor(c => c.Title, f => f.Commerce.ProductName())
+                    .RuleFor(c => c.Price, f => f.Random.Decimal(100, 100000));
+                    
+
+               /* fixture.Customize<Product>(product => product.Without(x => x.Id)
                                                             .Without(x => x.Colors)
                                                             .Without(x => x.Discount)
                                                             .Without(x => x.Price)
@@ -190,8 +199,10 @@ namespace Feipder.Data
                                                             .Without(x => x.Features)
                                                             .Without(x => x.CreatedDate)
                                                             .Without(x => x.Category));
-
-                var products = fixture.CreateMany<Product>(200).ToList();
+               */
+                //var products = fixture.CreateMany<Product>(200).ToList();
+      
+                var products = customerFaker.Generate(200).ToList();
 
                 var previewSettings = config.GetSection("ImageGeneration:ProductPreview");
                 var productImageSttings = config.GetSection("ImageGeneration:ProductImage");
@@ -206,7 +217,7 @@ namespace Feipder.Data
                 {
                     p.Brand = brands[random.Next(0, brands.Count)];
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
-                    p.Price = random.NextDouble() * 1000 + 100;
+                    //p.Price = random.NextDouble() * 1000 + 100;
                     p.IsNew = random.Next(100) < 20;
 
                     /// количество генерируемых изображений

@@ -21,8 +21,8 @@ public partial class Product
     public string? Name { get; set; } = null!;
 
     [Required(ErrorMessage = "The product must have a specified price")]
-    [Range(0, Double.MaxValue, ErrorMessage = "The price must be greater than 0")]
-    public double Price { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "The price must be greater than 0")]
+    public decimal Price { get; set; }
 
     public string? Description { get; set; } = null!;
 

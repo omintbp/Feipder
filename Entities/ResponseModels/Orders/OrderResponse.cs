@@ -33,9 +33,9 @@ namespace Feipder.Entities.ResponseModels.Orders
         public ICollection<OrderItemResponse> Items = new List<OrderItemResponse>();
 
         [Range(0, double.MaxValue)]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
-        [Range(0, double.MaxValue)]
-        public double ItemsCount { get; set; }
+        [Range(0, int.MaxValue)]
+        public int ItemsCount { get; set; }
     }
 }

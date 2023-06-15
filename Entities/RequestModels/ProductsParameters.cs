@@ -22,8 +22,8 @@ namespace Feipder.Entities.RequestModels
         [StringListParameter(ErrorMessage = "It should be a comma-separated list of categories [id1,id2,id3] (Without [])")]
         public string? Categories { get; set; } = null!;
 
-        public double MinPrice { get; set; } = 0;
-        public double MaxPrice { get; set; } = Double.MaxValue;
+        public decimal MinPrice { get; set; } = 0;
+        public decimal MaxPrice { get; set; } = decimal.MaxValue;
 
         public bool Discount { get; set; } = false;
         public bool NewProducts { get; set; } = false;
@@ -32,7 +32,7 @@ namespace Feipder.Entities.RequestModels
 
         public string Filter { get; set; } = "";
 
-        private bool IsPriceValid(Product product) => product.Price.InRange(MinPrice, MaxPrice);
+        private bool IsPriceValid(Product product) => MinPrice <= product.Price && MaxPrice >= product.Price;
         private bool IsBrandsValid(Product product) => Brands == null || Brands.ContainsId(product.Brand.Id);
         private bool IsColorsValid(Product product, DataContext context)
         {

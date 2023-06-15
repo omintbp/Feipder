@@ -33,7 +33,7 @@ namespace Feipder.Entities.ResponseModels.Products
         public string Alias { get; set; }
 
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         
         public bool IsNew { get; set; } = false;
         

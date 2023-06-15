@@ -20,17 +20,17 @@ namespace Feipder.Entities.ResponseModels.Basket
         /// Общая сумма товаров
         /// </summary>
         [Range(0, Int32.MaxValue)]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
 
         /// <summary>
         /// Сумма скидок
         /// </summary>
         [Range(0, Int32.MaxValue)]
-        public double DiscountPrice { get; set; }
+        public decimal DiscountPrice { get; set; }
 
         /// <summary>
         /// Сумма заказа с учётом скидок
         /// </summary>
-        public double FinalPrice { get => (TotalPrice - DiscountPrice) <= 0 ? 0 : TotalPrice - DiscountPrice; }
+        public decimal FinalPrice { get => (TotalPrice - DiscountPrice) <= 0 ? 0 : TotalPrice - DiscountPrice; }
     }
 }

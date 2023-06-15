@@ -12,10 +12,10 @@ namespace Feipder.Entities.ResponseModels.Basket
         
         [Required]
         [Range(0, Double.MaxValue)]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         
         [Required]
         [Range(0,Double.MaxValue)]
-        public double PriceWithDiscount { get; set; }
+        public decimal PriceWithDiscount { get; set; }
     }
 }

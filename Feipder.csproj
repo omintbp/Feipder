@@ -7,7 +7,7 @@
     <UserSecretsId>d6816868-9c2c-439a-996b-d1b570f6a023</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <Version>1.6.4.3</Version>
+    <Version>1.6.5.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.0" />
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="Faker.Net" Version="2.0.154" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
@@ -55,6 +57,7 @@
     <Folder Include="Entities\Admin\Categories\" />
     <Folder Include="wwwroot\categories\" />
     <Folder Include="wwwroot\brands\" />
+    <Folder Include="wwwroot\products\" />
   </ItemGroup>
   
   <ItemGroup>

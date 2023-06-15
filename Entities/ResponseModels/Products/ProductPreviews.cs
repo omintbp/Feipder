@@ -11,11 +11,11 @@ namespace Feipder.Entities.ResponseModels.Products
 
         [Required]
         [Range(0, int.MaxValue)]
-        public double MinPrice { get; set; }
+        public decimal MinPrice { get; set; }
 
         [Required]
-        [Range(0, int.MaxValue)]
-        public double MaxPrice { get; set; }
+        [Range(0, double.MaxValue)]
+        public decimal MaxPrice { get; set; }
 
         [Required]
         public ICollection<ProductPreview> Products { get; set; } = new List<ProductPreview>();

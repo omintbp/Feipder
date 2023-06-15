@@ -1,6 +1,0 @@
-﻿namespace Feipder.wwwroot.products
-{
-    public interface Interface
-    {
-    }
-}

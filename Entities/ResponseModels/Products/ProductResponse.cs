@@ -20,7 +20,7 @@ namespace Feipder.Entities.Models.ResponseModels.Products
 
         [Required]
         [Range(0, Double.MaxValue)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [StringLength(500)]
         public string Description { get; set; } = null!;

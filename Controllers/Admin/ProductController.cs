@@ -175,11 +175,37 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpPost("images")]
-        public async Task<ActionResult> PostProductImage()
+        public async Task<ActionResult> PostProductImage([FromForm]ProductImagePost request)
         {
             try
             {
-                return NoContent();
+                var product = _repository.Products.FindByCondition(x => x.Id == request.ProductId)
+                    .FirstOrDefault();
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var imagePath = await _repository.Images.UploadImage("Products", request.UploadedFile, _env);
+
+                var req = _accessor.HttpContext?.Request;
+                var imageRef = $"{req.Scheme}://{req.Host.Value}/{imagePath}";
+
+                var productImage = new ProductImage()
+                {
+                    Url = imageRef,
+                    Name = request.ImageName
+                };
+
+                product.ProductImages.Add(productImage);
+
+                _context.Products.Update(product);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(productImage);
+
             }
             catch (Exception e)
             {

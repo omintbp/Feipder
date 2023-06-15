@@ -15,7 +15,7 @@ namespace Feipder.Entities.ResponseModels.Basket
 
         [Required]
         [Range(0, double.MaxValue)]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
         [StringLength(50)]
