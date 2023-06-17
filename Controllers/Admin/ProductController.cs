@@ -8,6 +8,8 @@ using Feipder.Entities.ResponseModels.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel;
 using System.Data;
 
 namespace Feipder.Controllers.Admin
@@ -32,6 +34,14 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Получение всех товаров для таблички в админке", 
+            Description = "filterName - используется для поиска по названию товара <br />" +
+            " categoryName - используется для фильтрации по категории <br /> " +
+            " offset - сдвиг выборки || limit - ограничение на количество возвращаемых товаров")]
         public async Task<ActionResult<AdmProductsList>> GetProducts([FromQuery] string filterName = "",
             [FromQuery] string categoryName = "", [FromQuery] int offset = 0, [FromQuery] int limit = 20)
         {
@@ -70,6 +80,12 @@ namespace Feipder.Controllers.Admin
 
 
         [HttpGet("{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Получение информации об одном товаре в виде, удобном для админки")]
         public async Task<ActionResult<AdmProductPreview>> GetProduct(int productId)
         {
             try
@@ -96,8 +112,21 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Обновить информацию о товаре", 
+            Description = "Обновление основной информации о товаре." +
+            "Нельзя изменить цвет, количество товара в наличии, доступные цвета и многое другое. <br />Короче говоря, изменять можно лишь то, что можно")]
         public async Task<ActionResult> PutProduct(AdmProductPutRequest request)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var product = _repository.Products.FindByCondition((p) => p.Id == request.ProductId).FirstOrDefault();
@@ -135,8 +164,20 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpPut("images")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Изменить картинку товара",
+            Description = "Используется для изменения существующей картинки на другую.<br /> Название картинки, если менять его не нужно, можно не указывать")]
         public async Task<ActionResult<ProductImage>> UpdateProductImage([FromForm]ImageUpdateRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var product = _repository.Products.FindByCondition(x => x.Id == request.ProductId)
@@ -175,8 +216,19 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpPost("images")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Добавить для товара новую картинку")]
         public async Task<ActionResult> PostProductImage([FromForm]ProductImagePost request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var product = _repository.Products.FindByCondition(x => x.Id == request.ProductId)
@@ -214,6 +266,12 @@ namespace Feipder.Controllers.Admin
         }
 
         [HttpGet("{productId}/images")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [SwaggerOperation(Summary = "Получить список картинок товара. Особой ценности не несёт, использую его лишь для тестов")]
         public async Task<ActionResult<IEnumerable<ProductImage>>> GetProductImages(int productId)
         {
             try

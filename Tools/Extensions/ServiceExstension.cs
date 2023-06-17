@@ -62,7 +62,10 @@ namespace Feipder.Tools.Extensions
             var result = services.AddSwaggerGen(c =>
             {
                 c.EnableAnnotations();
-                c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString(), Description = "admin phone: 88005553535 \n guest phone: 88005553536 ||| код доступа всегда 0000" });
+                c.SwaggerDoc($"v1", new OpenApiInfo { Title = "Feip back", Version = version.ToString(), 
+                    Description = "admin phone: 88005553535 ||| guest phone: 88005553536 ||| код доступа всегда 0000 <br />" +
+                    "Если зачем-то вам понадобится посмотреть все загруженные картинки, то сделать это можно тут: http://158.160.96.8/"
+                });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,

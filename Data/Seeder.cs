@@ -219,6 +219,8 @@ namespace Feipder.Data
                     p.Category = lastCategories[random.Next(0, lastCategories.Count)];
                     //p.Price = random.NextDouble() * 1000 + 100;
                     p.IsNew = random.Next(100) < 20;
+                    //p.IsVisible = random.Next(100) > 20;
+                    p.IsVisible = true;
 
                     /// количество генерируемых изображений
                     var imageCount = random.Next(1, 7);
