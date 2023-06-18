@@ -39,11 +39,11 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var managedUser = await _userManager.FindByEmailAsync(email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Basket)
                     .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
                     .FirstOrDefaultAsync();
 
                 var products = _context.FavoriteProducts
@@ -82,11 +82,11 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var managedUser = await _userManager.FindByEmailAsync(email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Basket)
                     .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
                     .FirstOrDefaultAsync();
 
                 var userFavorites = await _context.FavoriteProducts.Where(x => Guid.Parse(user.Id) == x.UserId).ToListAsync();
@@ -109,11 +109,11 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var managedUser = await _userManager.FindByEmailAsync(email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Basket)
                     .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
                     .FirstOrDefaultAsync();
 
                 var userFavorites = await _context.FavoriteProducts.Where(x => Guid.Parse(user.Id) == x.UserId).ToListAsync();
@@ -157,11 +157,11 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var managedUser = await _userManager.FindByEmailAsync(email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Basket)
                     .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
                     .FirstOrDefaultAsync();
 
                 var basketProductsIds = user.Basket.Items.Select(x => x.ProductId).ToList();

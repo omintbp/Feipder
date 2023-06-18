@@ -20,7 +20,6 @@ namespace Feipder.Tools.Extensions
             var builder = services.AddIdentityCore<User>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
-                options.User.RequireUniqueEmail = true;
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;

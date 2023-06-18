@@ -47,9 +47,8 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var managedUser = await _userManager.FindByEmailAsync(email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Basket)
                     .ThenInclude(x => x.Items)
                     .FirstOrDefaultAsync();
@@ -124,8 +123,12 @@ namespace Feipder.Controllers
         {
             try
             {
-                var user = await _context.Users.Where(x => x.Email.Equals(User.FindFirstValue(ClaimTypes.Email)))
-                    .Include(x => x.Basket).ThenInclude(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync();
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
+                    .Include(x => x.Basket)
+                    .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
+                    .FirstOrDefaultAsync();
 
                 return Ok(new BasketStatusResponse()
                 {
@@ -249,10 +252,14 @@ namespace Feipder.Controllers
 
             try
             {
-                var user = _context.Users.Where(x => x.Email.Equals(User.FindFirstValue(ClaimTypes.Email)))
-                   .Include(x => x.Basket).ThenInclude(x=>x.Items).FirstOrDefault();
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
+                    .Include(x => x.Basket)
+                    .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
+                    .FirstOrDefaultAsync();
 
-                if(user == null)
+                if (user == null)
                 {
                     return BadRequest();
                 }
@@ -332,8 +339,12 @@ namespace Feipder.Controllers
 
             try
             {
-                var user = _context.Users.Where(x => x.Email.Equals(User.FindFirstValue(ClaimTypes.Email)))
-                   .Include(x => x.Basket).FirstOrDefault();
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
+                    .Include(x => x.Basket)
+                    .ThenInclude(x => x.Items)
+                    .ThenInclude(x => x.Product)
+                    .FirstOrDefaultAsync();
 
                 if (user == null)
                 {

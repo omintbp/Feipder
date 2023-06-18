@@ -66,14 +66,14 @@ namespace Feipder.Controllers
                 request.Address = pickupPoint.Address;
             }
 
-            var email = User.FindFirstValue(ClaimTypes.Email);
-            var user = await _context.Users.Where(x => x.Email.Equals(email))
+            var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+            var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                 .Include(x => x.Basket)
                 .ThenInclude(x => x.Items)
                 .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync();
 
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest();
             }
@@ -155,8 +155,9 @@ namespace Feipder.Controllers
         {
             try
             {
-                var email = User.FindFirstValue(ClaimTypes.Email);
-                var user = await _context.Users.Where(x => x.Email.Equals(email))
+
+                var userPhone = User.FindFirstValue(ClaimTypes.MobilePhone);
+                var user = await _context.Users.Where(x => x.PhoneNumber.Equals(userPhone))
                     .Include(x => x.Orders)
                         .ThenInclude(x => x.Address)
                     .Include(x => x.Orders)
