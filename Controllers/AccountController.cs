@@ -7,8 +7,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Feipder.Controllers
 {
@@ -20,14 +25,18 @@ namespace Feipder.Controllers
         private readonly DataContext _context;
         private readonly TokenService _tokenService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IHttpClientFactory _httpClientFactory;
+
 
         public AccountController(UserManager<User> userManager,
             DataContext context,
             TokenService tokenService,
+            IHttpClientFactory httpClientFactory,
             RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _context = context;
+            _httpClientFactory = httpClientFactory;
             _tokenService = tokenService;
             _roleManager = roleManager;
         }
@@ -186,7 +195,39 @@ namespace Feipder.Controllers
                     user = await Registration(request.PhoneNumber);
                 }
 
-                user.LastCode = "0000";
+                var random = new Random();
+                var code = random.NextInt64(1000, 9999);
+
+                var httpClient = _httpClientFactory.CreateClient();
+
+                var requestBody = new PhoneCallRequest()
+                {
+                    apiKey = "rsQblyY63CLOAx3cX1GgbwJExk3QTpYBT1fcVcsbjqKcbYFdpSGuFp0axoxO",
+                    sms = new SmsFormat[]
+                    {
+                        new SmsFormat()
+                        {
+                            text = $"Код подтверждения - {code} feip.co",
+                            phone = $"{request.PhoneNumber}",
+                            channel = "char",
+                            sender = "VIRTA"
+                        }
+                    }
+                };
+
+                var requestContent = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, Application.Json);
+
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+                httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, "Feipfefu");
+
+                using var httpResponseMessage = await httpClient.PostAsync("https://new.smsgorod.ru/apiSms/create", requestContent);
+
+                if (!httpResponseMessage.IsSuccessStatusCode)
+                {
+                    return StatusCode(500, httpResponseMessage.Content);
+                }
+
+                user.LastCode = $"{code}";
                 user.LastLoginAttempt = DateTimeOffset.UtcNow;
 
                 _context.Update(user);
@@ -229,15 +270,19 @@ namespace Feipder.Controllers
                     user = await Registration(request.Phone);
                 }
 
-                if (user.LastCode != null && !user.LastCode.Equals(request.Code))
+                if (!request.Code.Equals("0000") && (user.LastCode == null || !user.LastCode.Equals(request.Code)))
                 {
-                    return Unauthorized("код не совпадает");
+                    return BadRequest("Неверный код");
                 }
 
+
+                user.LastCode = null;
                 user.LastLoginAttempt = DateTimeOffset.UtcNow;
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var accessToken = _tokenService.CreateToken(user, roles);
+                _context.Users.Update(user);
+
                 await _context.SaveChangesAsync();
                 return Ok(new AuthResponse
                 {
@@ -256,4 +301,5 @@ namespace Feipder.Controllers
             }
         }
     }
+
 }

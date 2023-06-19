@@ -5,7 +5,8 @@ namespace Feipder.Entities.RequestModels
     public class AuthCallRequest
     {
         [Required]
-        [DataType(DataType.PhoneNumber)]
+        [Phone]
+        [RegularExpression(@"^((\+7|7)+([0-9]){10})$")]
         public string PhoneNumber { get; set; } = null!;
     }
 }

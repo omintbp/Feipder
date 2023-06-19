@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.ConfigureSwagger();
 builder.Services.AddDirectoryBrowser();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 
 #endregion
 
